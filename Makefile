@@ -71,7 +71,22 @@ setup-unit-integration: clean-unit-integration
 	docker run --detach --network test_network --name postgresql-test --env POSTGRES_DB=lisk --env POSTGRES_PASSWORD=password --env POSTGRES_USER=lisk postgres:$(POSTGRESQL_VERSION)
 	sleep 10
 
-test-framework-legacy-%: setup-unit-integration
+patched_node:
+	mkdir -p patched_node
+	echo *:*:*:lisk:password >patched_node/pgpass
+	echo FROM node:$(NODEJS_VERSION) >patched_node/Dockerfile
+	echo RUN apt-get update \&\& apt-get install --assume-yes postgresql-client >>patched_node/Dockerfile
+	echo COPY pgpass /home/node/.pgpass >>patched_node/Dockerfile
+	echo RUN chown node:node /home/node/.pgpass \&\& chmod 0600 /home/node/.pgpass >>patched_node/Dockerfile
+	docker build -t=patched_node:$(NODEJS_VERSION) patched_node/
+
+bin:
+	mkdir -p bin
+
+bin/%db: bin
+	echo /usr/bin/$*db --host=postgresql-test --user=lisk \$$1 >$@
+
+test-framework-legacy-%: setup-unit-integration patched_node bin/createdb bin/dropdb
 	docker run --rm --network test_network --volume ${PWD}:/code --workdir /code/framework \
 		--env NODE_ENV=test --env MAX_TASK_LIMIT=10 \
 		--env LISK_REDIS_HOST=redis-test --env LISK_REDIS_PORT=6379 \
