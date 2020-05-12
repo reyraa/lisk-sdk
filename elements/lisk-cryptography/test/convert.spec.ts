@@ -20,6 +20,7 @@ import {
 	convertPrivateKeyEd2Curve,
 	stringifyEncryptedPassphrase,
 	parseEncryptedPassphrase,
+	getFirstNBytes,
 } from '../src/convert';
 // Require is used for stubbing
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-var-requires
@@ -43,11 +44,13 @@ describe('convert', () => {
 		'6f9d780305bda43dd47a291d897f2d8845a06160632d82fb1f209fdd46ed3c1e',
 		'hex',
 	);
-	const defaultAddress = '18160565574430594874L';
 	const defaultStringWithMoreThanEightCharacters = '0123456789';
 	const defaultFirstEightCharactersReversed = '76543210';
-	const defaultDataForBuffer = 'Hello!';
-	const defaultAddressFromBuffer = '79600447942433L';
+	const defaultDataForBuffer = 'Hello Lisk SDK - Bring the app to life!';
+	const defaultAddress = Buffer.from(
+		'3a971fd02b4a07fc20aad1936d3cb1d263b96e0f',
+		'hex',
+	);
 
 	describe('#getFirstEightBytesReversed', () => {
 		it('should get the first eight bytes reversed from a Buffer', () => {
@@ -69,17 +72,28 @@ describe('convert', () => {
 	});
 
 	describe('#toAddress', () => {
-		it('should create an address from a buffer', () => {
+		it('should create address bytes from a buffer of 20 bytes', () => {
 			const bufferInit = Buffer.from(defaultDataForBuffer);
-			const address = toAddress(bufferInit);
-			expect(address).toEqual(defaultAddressFromBuffer);
+			const firstTwentyBytes = getFirstNBytes(bufferInit, 20);
+			const address = toAddress(firstTwentyBytes);
+			expect(address).toEqual(firstTwentyBytes);
 		});
 
-		it('should throw on more than 8 bytes as input', () => {
+		it('should create truncated address bytes from a buffer of more than 20 bytes ', () => {
+			const bufferInit = Buffer.from(defaultDataForBuffer);
+			const firstTwentyBytes = getFirstNBytes(bufferInit, 20);
+			const address = toAddress(getFirstNBytes(bufferInit, 25));
+			expect(address).toEqual(firstTwentyBytes);
+		});
+
+		it('should throw on less than 20 bytes as input', () => {
 			const bufferExceedError =
-				'The buffer for Lisk addresses must not have more than 8 bytes';
-			const bufferInit = Buffer.from(defaultStringWithMoreThanEightCharacters);
-			expect(toAddress.bind(null, bufferInit)).toThrow(bufferExceedError);
+				'The buffer for Lisk addresses must contains exactly 20 bytes';
+			const bufferInit = Buffer.from(defaultDataForBuffer);
+			const firstNineteenBytes = getFirstNBytes(bufferInit, 19);
+			expect(toAddress.bind(null, firstNineteenBytes)).toThrow(
+				bufferExceedError,
+			);
 		});
 	});
 
@@ -92,7 +106,7 @@ describe('convert', () => {
 
 		it('should generate address from publicKey', () => {
 			const address = getAddressFromPublicKey(defaultPublicKey);
-			expect(address).toBe(defaultAddress);
+			expect(address).toEqual(defaultAddress);
 		});
 	});
 

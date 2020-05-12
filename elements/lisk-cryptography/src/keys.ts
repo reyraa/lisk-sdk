@@ -59,7 +59,7 @@ export const getKeys = getPrivateAndPublicKeyFromPassphrase;
 
 export const getAddressAndPublicKeyFromPassphrase = (
 	passphrase: string,
-): { readonly address: string; readonly publicKey: string } => {
+): { readonly address: Buffer; readonly publicKey: string } => {
 	const { publicKey } = getKeys(passphrase);
 	const address = getAddressFromPublicKey(publicKey);
 
@@ -69,13 +69,13 @@ export const getAddressAndPublicKeyFromPassphrase = (
 	};
 };
 
-export const getAddressFromPassphrase = (passphrase: string): string => {
+export const getAddressFromPassphrase = (passphrase: string): Buffer => {
 	const { publicKey } = getKeys(passphrase);
 
 	return getAddressFromPublicKey(publicKey);
 };
 
-export const getAddressFromPrivateKey = (privateKey: string): string => {
+export const getAddressFromPrivateKey = (privateKey: string): Buffer => {
 	const publicKeyBytes = getPublicKey(hexToBuffer(privateKey));
 	const publicKey = bufferToHex(publicKeyBytes);
 
