@@ -15,12 +15,23 @@ import {
 	isValidTransferAmount,
 	isValidTransferData,
 	validateAddress,
+	validateLegacyAddress,
 	validatePublicKey,
 } from './validation';
 
 export const address = (data: string): boolean => {
 	try {
 		validateAddress(data);
+
+		return true;
+	} catch (error) {
+		return false;
+	}
+};
+
+export const legacyAddress = (data: string): boolean => {
+	try {
+		validateLegacyAddress(data);
 
 		return true;
 	} catch (error) {

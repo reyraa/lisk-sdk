@@ -227,7 +227,7 @@ describe('validator', () => {
 		});
 	});
 
-	describe('address', () => {
+	describe('legacyAddress', () => {
 		let addressSchema: object;
 		beforeEach(() => {
 			addressSchema = {
@@ -237,7 +237,7 @@ describe('validator', () => {
 						properties: {
 							target: {
 								type: 'string',
-								format: 'address',
+								format: 'legacyAddress',
 							},
 						},
 					},
@@ -258,8 +258,8 @@ describe('validator', () => {
 					keyword: 'format',
 					dataPath: '.target',
 					schemaPath: '#/allOf/1/properties/target/format',
-					params: { format: 'address' },
-					message: 'should match format "address"',
+					params: { format: 'legacyAddress' },
+					message: 'should match format "legacyAddress"',
 				},
 			];
 
@@ -274,8 +274,8 @@ describe('validator', () => {
 					keyword: 'format',
 					dataPath: '.target',
 					schemaPath: '#/allOf/1/properties/target/format',
-					params: { format: 'address' },
-					message: 'should match format "address"',
+					params: { format: 'legacyAddress' },
+					message: 'should match format "legacyAddress"',
 				},
 			];
 
@@ -290,8 +290,8 @@ describe('validator', () => {
 					keyword: 'format',
 					dataPath: '.target',
 					schemaPath: '#/allOf/1/properties/target/format',
-					params: { format: 'address' },
-					message: 'should match format "address"',
+					params: { format: 'legacyAddress' },
+					message: 'should match format "legacyAddress"',
 				},
 			];
 
@@ -306,8 +306,8 @@ describe('validator', () => {
 					keyword: 'format',
 					dataPath: '.target',
 					schemaPath: '#/allOf/1/properties/target/format',
-					params: { format: 'address' },
-					message: 'should match format "address"',
+					params: { format: 'legacyAddress' },
+					message: 'should match format "legacyAddress"',
 				},
 			];
 
@@ -322,8 +322,8 @@ describe('validator', () => {
 					keyword: 'format',
 					dataPath: '.target',
 					schemaPath: '#/allOf/1/properties/target/format',
-					params: { format: 'address' },
-					message: 'should match format "address"',
+					params: { format: 'legacyAddress' },
+					message: 'should match format "legacyAddress"',
 				},
 			];
 			expect(
@@ -337,8 +337,8 @@ describe('validator', () => {
 					keyword: 'format',
 					dataPath: '.target',
 					schemaPath: '#/allOf/1/properties/target/format',
-					params: { format: 'address' },
-					message: 'should match format "address"',
+					params: { format: 'legacyAddress' },
+					message: 'should match format "legacyAddress"',
 				},
 			];
 
@@ -353,8 +353,8 @@ describe('validator', () => {
 					keyword: 'format',
 					dataPath: '.target',
 					schemaPath: '#/allOf/1/properties/target/format',
-					params: { format: 'address' },
-					message: 'should match format "address"',
+					params: { format: 'legacyAddress' },
+					message: 'should match format "legacyAddress"',
 				},
 			];
 

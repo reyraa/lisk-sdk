@@ -12,11 +12,13 @@
  * Removal or modification of this copyright notice is prohibited.
  *
  */
+import { getRandomBytes } from '@liskhq/lisk-cryptography';
 import {
 	validatePublicKeysForDuplicates,
 	validatePublicKey,
 	validatePublicKeys,
 	validateAddress,
+	validateLegacyAddress,
 	isValidNonTransferAmount,
 	isValidTransferAmount,
 	isValidFee,
@@ -160,10 +162,8 @@ describe('validation', () => {
 	describe('#validateAddress', () => {
 		describe('Given valid addresses', () => {
 			const addresses = [
-				'13133549779353512613L',
-				'18446744073709551615L',
-				'1L',
-				'0L',
+				getRandomBytes(20).toString('hex'),
+				getRandomBytes(20),
 			];
 
 			it('should return true', () => {
@@ -173,10 +173,54 @@ describe('validation', () => {
 			});
 		});
 
+		describe('Given an address which is not hex format', () => {
+			const address = '124aefui';
+			it('should throw an error', () => {
+				return expect(validateAddress.bind(null, address)).toThrow(
+					'Address string is not hex format',
+				);
+			});
+		});
+
+		describe('Given an address which is too short', () => {
+			const address = getRandomBytes(15);
+			it('should throw an error', () => {
+				return expect(validateAddress.bind(null, address)).toThrow(
+					'Address length does not match requirements. Expected between 20 bytes',
+				);
+			});
+		});
+
+		describe('Given an address that is too long', () => {
+			const address = getRandomBytes(25);
+			it('should throw an error', () => {
+				return expect(validateAddress.bind(null, address)).toThrow(
+					'Address length does not match requirements. Expected between 20 bytes',
+				);
+			});
+		});
+	});
+
+	describe('#validateLegacyAddress', () => {
+		describe('Given valid addresses', () => {
+			const addresses = [
+				'13133549779353512613L',
+				'18446744073709551615L',
+				'1L',
+				'0L',
+			];
+
+			it('should return true', () => {
+				return addresses.forEach(address => {
+					return expect(validateLegacyAddress(address)).toBeTrue();
+				});
+			});
+		});
+
 		describe('Given an address that is too short', () => {
 			const address = 'L';
 			it('should throw an error', () => {
-				return expect(validateAddress.bind(null, address)).toThrow(
+				return expect(validateLegacyAddress.bind(null, address)).toThrow(
 					'Address length does not match requirements. Expected between 2 and 22 characters.',
 				);
 			});
@@ -185,7 +229,7 @@ describe('validation', () => {
 		describe('Given an address that is too long', () => {
 			const address = '12345678901234567890123L';
 			it('should throw an error', () => {
-				return expect(validateAddress.bind(null, address)).toThrow(
+				return expect(validateLegacyAddress.bind(null, address)).toThrow(
 					'Address length does not match requirements. Expected between 2 and 22 characters.',
 				);
 			});
@@ -194,7 +238,7 @@ describe('validation', () => {
 		describe('Given an address containing non-numeric letters', () => {
 			const address = '123aL';
 			it('should throw an error', () => {
-				return expect(validateAddress.bind(null, address)).toThrow(
+				return expect(validateLegacyAddress.bind(null, address)).toThrow(
 					'Address format does not match requirements. Address includes non-numeric characters.',
 				);
 			});
@@ -203,7 +247,7 @@ describe('validation', () => {
 		describe('Given an address without L at the end', () => {
 			const address = '1234567890';
 			it('should throw an error', () => {
-				return expect(validateAddress.bind(null, address)).toThrow(
+				return expect(validateLegacyAddress.bind(null, address)).toThrow(
 					'Address format does not match requirements. Expected "L" at the end.',
 				);
 			});
@@ -212,7 +256,7 @@ describe('validation', () => {
 		describe('Given an address that includes `.`', () => {
 			const address = '14.15133512790761431L';
 			it('should throw an error', () => {
-				return expect(validateAddress.bind(null, address)).toThrow(
+				return expect(validateLegacyAddress.bind(null, address)).toThrow(
 					'Address format does not match requirements. Address includes invalid character: `.`.',
 				);
 			});
@@ -221,7 +265,7 @@ describe('validation', () => {
 		describe('Given an address that is out of range', () => {
 			const address = '18446744073709551616L';
 			it('should throw an error', () => {
-				return expect(validateAddress.bind(null, address)).toThrow(
+				return expect(validateLegacyAddress.bind(null, address)).toThrow(
 					'Address format does not match requirements. Address out of maximum range.',
 				);
 			});
@@ -230,7 +274,7 @@ describe('validation', () => {
 		describe('Given an address that has leading zeros', () => {
 			const address = '00015133512790761431L';
 			it('should throw an error', () => {
-				return expect(validateAddress.bind(null, address)).toThrow(
+				return expect(validateLegacyAddress.bind(null, address)).toThrow(
 					"Address string format does not match it's number representation.",
 				);
 			});

@@ -193,13 +193,26 @@ export const validatePublicKeys = (
 const MIN_ADDRESS_LENGTH = 2;
 const MAX_ADDRESS_LENGTH = 22;
 const BASE_TEN = 10;
-// TODO: Validate the buffer type address - https://github.com/LiskHQ/lisk-sdk/issues/5301
+const ADDRESS_BYTE_LENGTH = 20;
 export const validateAddress = (address: string | Buffer): boolean => {
-	// TODO: Validate the buffer type address - https://github.com/LiskHQ/lisk-sdk/issues/5301
-	if (typeof address === 'object') {
-		return true;
+	if (typeof address === 'string' && !isHexString(address)) {
+		throw new Error('Address string is not hex format');
 	}
 
+	const buff =
+		typeof address === 'string' ? Buffer.from(address, 'hex') : address;
+
+	if (buff.length !== ADDRESS_BYTE_LENGTH) {
+		throw new Error(
+			`Address length does not match requirements. Expected between ${ADDRESS_BYTE_LENGTH} bytes.`,
+		);
+	}
+
+	return true;
+};
+
+// TODO: Validate the buffer type address - https://github.com/LiskHQ/lisk-sdk/issues/5301
+export const validateLegacyAddress = (address: string): boolean => {
 	if (
 		address.length < MIN_ADDRESS_LENGTH ||
 		address.length > MAX_ADDRESS_LENGTH
