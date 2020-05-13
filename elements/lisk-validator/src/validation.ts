@@ -193,7 +193,13 @@ export const validatePublicKeys = (
 const MIN_ADDRESS_LENGTH = 2;
 const MAX_ADDRESS_LENGTH = 22;
 const BASE_TEN = 10;
-export const validateAddress = (address: string): boolean => {
+// TODO: Validate the buffer type address - https://github.com/LiskHQ/lisk-sdk/issues/5301
+export const validateAddress = (address: string | Buffer): boolean => {
+	// TODO: Validate the buffer type address - https://github.com/LiskHQ/lisk-sdk/issues/5301
+	if (typeof address === 'object') {
+		return true;
+	}
+
 	if (
 		address.length < MIN_ADDRESS_LENGTH ||
 		address.length > MAX_ADDRESS_LENGTH
