@@ -34,7 +34,7 @@ describe('dpos.verifyBlockForger()', () => {
 						{
 							round: 3,
 							delegates: delegatePublicKeys.map(pk =>
-								getAddressFromPublicKey(pk),
+								getAddressFromPublicKey(pk).toString('hex'),
 							),
 						},
 					]),
@@ -69,7 +69,9 @@ describe('dpos.verifyBlockForger()', () => {
 			JSON.stringify([
 				{
 					round: 1,
-					delegates: delegatePublicKeys.map(pk => getAddressFromPublicKey(pk)),
+					delegates: delegatePublicKeys.map(pk =>
+						getAddressFromPublicKey(pk).toString('hex'),
+					),
 				},
 			]),
 		);

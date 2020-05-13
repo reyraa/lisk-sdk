@@ -12,11 +12,7 @@
  * Removal or modification of this copyright notice is prohibited.
  */
 
-import {
-	getAddressFromPublicKey,
-	hash,
-	intToBuffer,
-} from '@liskhq/lisk-cryptography';
+import { getAddressFromPublicKey, hash } from '@liskhq/lisk-cryptography';
 import * as Debug from 'debug';
 
 import {
@@ -38,7 +34,6 @@ import {
 
 // eslint-disable-next-line new-cap
 const debug = Debug('lisk:dpos:delegate_list');
-const SIZE_UINT64 = 8;
 
 interface DelegatesListConstructor {
 	readonly rounds: Rounds;
@@ -50,7 +45,7 @@ interface DelegatesListConstructor {
 }
 
 interface DelegateListWithRoundHash {
-	readonly address: string;
+	readonly address: Buffer;
 	roundHash: Buffer;
 }
 
@@ -63,15 +58,36 @@ export const getForgersList = async (
 	if (!forgersListStr) {
 		return [];
 	}
+	// TODO: Removed after serialization of consensus state
+	const parsedForgersList = (JSON.parse(forgersListStr) as ForgersList).map(
+		list => ({
+			round: list.round,
+			delegates: list.delegates.map(d => Buffer.from(d.toString(), 'hex')),
+			standby:
+				list.standby !== undefined
+					? list.standby.map(d => Buffer.from(d.toString(), 'hex'))
+					: [],
+		}),
+	);
 
-	return JSON.parse(forgersListStr) as ForgersList;
+	return parsedForgersList as ForgersList;
 };
 
 const _setForgersList = (
 	stateStore: StateStore,
 	forgersList: ForgersList,
 ): void => {
-	const forgersListStr = JSON.stringify(forgersList);
+	// TODO: Removed after serialization of consensus state
+	const parsedForgersList = forgersList.map(list => ({
+		round: list.round,
+		delegates: list.delegates.map(d => d.toString('hex')),
+		standby:
+			list.standby !== undefined
+				? list.standby.map(d => d.toString('hex'))
+				: [],
+	}));
+
+	const forgersListStr = JSON.stringify(parsedForgersList);
 	stateStore.consensus.set(CONSENSUS_STATE_FORGERS_LIST_KEY, forgersListStr);
 };
 
@@ -85,14 +101,34 @@ export const getVoteWeights = async (
 		return [];
 	}
 
-	return JSON.parse(voteWeightsStr) as VoteWeights;
+	// TODO: Removed after serialization of consensus state
+	const parsedVoteWeights = (JSON.parse(voteWeightsStr) as VoteWeights).map(
+		voteWeight => ({
+			round: voteWeight.round,
+			delegates: voteWeight.delegates.map(d => ({
+				voteWeight: d.voteWeight,
+				address: Buffer.from(d.address.toString(), 'hex'),
+			})),
+		}),
+	);
+
+	return parsedVoteWeights as VoteWeights;
 };
 
 const _setVoteWeights = (
 	stateStore: StateStore,
 	voteWeights: VoteWeights,
 ): void => {
-	const voteWeightsStr = JSON.stringify(voteWeights);
+	// TODO: Removed after serialization of consensus state
+	const parsedVoteWeights = voteWeights.map(voteWeight => ({
+		round: voteWeight.round,
+		delegates: voteWeight.delegates.map(d => ({
+			voteWeight: d.voteWeight,
+			address: d.address.toString('hex'),
+		})),
+	}));
+
+	const voteWeightsStr = JSON.stringify(parsedVoteWeights);
 	stateStore.consensus.set(CONSENSUS_STATE_VOTE_WEIGHTS_KEY, voteWeightsStr);
 };
 
@@ -138,18 +174,14 @@ export const deleteVoteWeightsAfterRound = async (
 
 export const shuffleDelegateList = (
 	previousRoundSeed1: Buffer,
-	addresses: ReadonlyArray<string>,
-): ReadonlyArray<string> => {
+	addresses: ReadonlyArray<Buffer>,
+): ReadonlyArray<Buffer> => {
 	const delegateList = [...addresses].map(delegate => ({
 		address: delegate,
 	})) as DelegateListWithRoundHash[];
 
 	for (const delegate of delegateList) {
-		const addressBuffer = intToBuffer(
-			delegate.address.slice(0, -1),
-			SIZE_UINT64,
-		);
-		const seedSource = Buffer.concat([previousRoundSeed1, addressBuffer]);
+		const seedSource = Buffer.concat([previousRoundSeed1, delegate.address]);
 		delegate.roundHash = hash(seedSource);
 	}
 
@@ -159,7 +191,7 @@ export const shuffleDelegateList = (
 			return diff;
 		}
 
-		return delegate1.address.localeCompare(delegate2.address, 'en');
+		return Buffer.compare(delegate1.address, delegate2.address);
 	});
 
 	return delegateList.map(delegate => delegate.address);
@@ -172,7 +204,7 @@ export const shuffleDelegateList = (
 export const getForgerAddressesForRound = async (
 	round: number,
 	stateStore: StateStore,
-): Promise<ReadonlyArray<string>> => {
+): Promise<ReadonlyArray<Buffer>> => {
 	const forgersList = await getForgersList(stateStore);
 	const delegateAddresses = forgersList.find(fl => fl.round === round)
 		?.delegates;
@@ -267,13 +299,13 @@ export class DelegatesList {
 		for (const account of updatedAccounts) {
 			// Insert only if account is a delegate
 			if (account.username) {
-				updatedAccountsMap[account.address] = account;
+				updatedAccountsMap[account.address.toString('hex')] = account;
 			}
 		}
 		// Inject delegate account if it doesn't exist
 		for (const delegate of originalDelegates) {
-			if (updatedAccountsMap[delegate.address] === undefined) {
-				updatedAccountsMap[delegate.address] = delegate;
+			if (updatedAccountsMap[delegate.address.toString('hex')] === undefined) {
+				updatedAccountsMap[delegate.address.toString('hex')] = delegate;
 			}
 		}
 		const delegates = [...Object.values(updatedAccountsMap)];
@@ -305,7 +337,7 @@ export class DelegatesList {
 				return -1;
 			}
 
-			return a.address.localeCompare(b.address, 'en');
+			return Buffer.compare(a.address, b.address);
 		});
 
 		const activeDelegates = [];
@@ -435,7 +467,7 @@ export class DelegatesList {
 		_setForgersList(stateStore, forgersList);
 	}
 
-	public async getDelegateList(round: number): Promise<ReadonlyArray<string>> {
+	public async getDelegateList(round: number): Promise<ReadonlyArray<Buffer>> {
 		const forgersListStr = await this.chain.dataAccess.getConsensusState(
 			CONSENSUS_STATE_FORGERS_LIST_KEY,
 		);
@@ -450,7 +482,12 @@ export class DelegatesList {
 			throw new Error(`No delegate list found for round: ${round.toString()}`);
 		}
 
-		return delegateAddresses;
+		// TODO: Removed after serialization of consensus state
+		const binaryAddresses = delegateAddresses.map(address =>
+			Buffer.from(address.toString(), 'hex'),
+		);
+
+		return binaryAddresses;
 	}
 
 	public async verifyBlockForger(block: BlockHeader): Promise<boolean> {
@@ -473,9 +510,10 @@ export class DelegatesList {
 
 		// Verify if forger exists and matches the generatorPublicKey on block
 		if (
-			!expectedForgerAddress ||
-			getAddressFromPublicKey(block.generatorPublicKey) !==
-				expectedForgerAddress
+			expectedForgerAddress === undefined ||
+			!getAddressFromPublicKey(block.generatorPublicKey).equals(
+				expectedForgerAddress,
+			)
 		) {
 			throw new Error(
 				`Failed to verify slot: ${currentSlot.toString()}. Block Height: ${block.height.toString()}`,

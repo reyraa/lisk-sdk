@@ -25,6 +25,12 @@ describe('dpos.isActiveDelegate', () => {
 		voteWeight: '100000000000',
 	}));
 
+	// TODO: Removed after serialization of consensus state
+	const delegatesAddressesParsed = delegatesAddresses.map(d => ({
+		address: d.address.toString('hex'),
+		voteWeight: '100000000000',
+	}));
+
 	let dpos: Dpos;
 	let chainMock: any;
 
@@ -46,7 +52,7 @@ describe('dpos.isActiveDelegate', () => {
 	describe('When there is no forgers list corresponding to the height', () => {
 		it('should throw an error', async () => {
 			chainMock.dataAccess.getConsensusState.mockResolvedValue(
-				JSON.stringify([{ round: 5, delegates: delegatesAddresses }]),
+				JSON.stringify([{ round: 5, delegates: delegatesAddressesParsed }]),
 			);
 
 			await expect(dpos.isActiveDelegate(defaultAddress, 1023)).rejects.toThrow(
@@ -64,7 +70,7 @@ describe('dpos.isActiveDelegate', () => {
 							round: 5,
 							delegates: [
 								...delegatesAddresses,
-								{ address: defaultAddress, voteWeight: '0' },
+								{ address: defaultAddress.toString('hex'), voteWeight: '0' },
 							],
 						},
 					]),
@@ -83,8 +89,11 @@ describe('dpos.isActiveDelegate', () => {
 						{
 							round: 5,
 							delegates: [
-								{ address: defaultAddress, voteWeight: '200000000000' },
-								...delegatesAddresses,
+								{
+									address: defaultAddress.toString('hex'),
+									voteWeight: '200000000000',
+								},
+								...delegatesAddressesParsed,
 							],
 						},
 					]),

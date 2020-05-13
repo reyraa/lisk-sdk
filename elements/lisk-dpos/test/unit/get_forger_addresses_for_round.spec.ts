@@ -52,9 +52,21 @@ describe('dpos.getForgerAddressesForRound()', () => {
 				standby: [],
 			},
 		];
+
+		// TODO: Removed after serialization of consensus state
+		const parsedForgersList = [
+			{
+				round,
+				delegates: delegatePublicKeys.map(pk =>
+					getAddressFromPublicKey(pk).toString('hex'),
+				),
+				standby: [],
+			},
+		];
+
 		when(chainStub.dataAccess.getConsensusState)
 			.calledWith(CONSENSUS_STATE_FORGERS_LIST_KEY)
-			.mockReturnValue(JSON.stringify(forgersList));
+			.mockReturnValue(JSON.stringify(parsedForgersList));
 
 		// Act
 		const list = await dpos.getForgerAddressesForRound(round);

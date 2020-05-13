@@ -214,8 +214,8 @@ export class DelegatesInfo {
 
 		const missedBlocksDelegateAddresses = expectedForgingAddresses.filter(
 			expectedAddress =>
-				!forgedPublicKeys.find(
-					publicKey => getAddressFromPublicKey(publicKey) === expectedAddress,
+				!forgedPublicKeys.find(publicKey =>
+					getAddressFromPublicKey(publicKey).equals(expectedAddress),
 				),
 		);
 

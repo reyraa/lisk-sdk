@@ -139,7 +139,7 @@ describe('dpos.undo()', () => {
 					{
 						round: 10,
 						delegates: forgedDelegates.map(d => ({
-							address: d.address,
+							address: d.address.toString('hex'),
 							voteWeight: d.totalVotesReceived.toString(),
 						})),
 					},
@@ -148,37 +148,37 @@ describe('dpos.undo()', () => {
 					{
 						round: 8,
 						delegates: [
-							...forgedDelegates.map(d => d.address),
-							missedDelegate.address,
+							...forgedDelegates.map(d => d.address.toString('hex')),
+							missedDelegate.address.toString('hex'),
 						],
 						standy: [],
 					},
 					{
 						round: 9,
 						delegates: [
-							...forgedDelegates.map(d => d.address),
-							missedDelegate.address,
+							...forgedDelegates.map(d => d.address.toString('hex')),
+							missedDelegate.address.toString('hex'),
 						],
 					},
 					{
 						round: 10,
 						delegates: [
-							...forgedDelegates.map(d => d.address),
-							missedDelegate.address,
+							...forgedDelegates.map(d => d.address.toString('hex')),
+							missedDelegate.address.toString('hex'),
 						],
 					},
 					{
 						round: 11,
 						delegates: [
-							...forgedDelegates.map(d => d.address),
-							missedDelegate.address,
+							...forgedDelegates.map(d => d.address.toString('hex')),
+							missedDelegate.address.toString('hex'),
 						],
 					},
 					{
 						round: 12,
 						delegates: [
-							...forgedDelegates.map(d => d.address),
-							missedDelegate.address,
+							...forgedDelegates.map(d => d.address.toString('hex')),
+							missedDelegate.address.toString('hex'),
 						],
 					},
 				]),
@@ -274,7 +274,7 @@ describe('dpos.undo()', () => {
 						{
 							round: 10,
 							delegates: forgedDelegates.map(d => ({
-								address: d.address,
+								address: d.address.toString('hex'),
 								voteWeight: d.totalVotesReceived.toString(),
 							})),
 						},
@@ -282,24 +282,34 @@ describe('dpos.undo()', () => {
 					[CONSENSUS_STATE_FORGERS_LIST_KEY]: JSON.stringify([
 						{
 							round: 8,
-							delegates: [...forgedDelegates.map(d => d.address)],
+							delegates: [
+								...forgedDelegates.map(d => d.address.toString('hex')),
+							],
 							standy: [],
 						},
 						{
 							round: 9,
-							delegates: [...forgedDelegates.map(d => d.address)],
+							delegates: [
+								...forgedDelegates.map(d => d.address.toString('hex')),
+							],
 						},
 						{
 							round: 10,
-							delegates: [...forgedDelegates.map(d => d.address)],
+							delegates: [
+								...forgedDelegates.map(d => d.address.toString('hex')),
+							],
 						},
 						{
 							round: 11,
-							delegates: [...forgedDelegates.map(d => d.address)],
+							delegates: [
+								...forgedDelegates.map(d => d.address.toString('hex')),
+							],
 						},
 						{
 							round: 12,
-							delegates: [...forgedDelegates.map(d => d.address)],
+							delegates: [
+								...forgedDelegates.map(d => d.address.toString('hex')),
+							],
 						},
 					]),
 				});

@@ -15,15 +15,26 @@
 import { Slots } from '@liskhq/lisk-chain';
 import * as randomSeedModule from '../../src/random_seed';
 import { Dpos } from '../../src';
-import { Account, Block } from '../../src/types';
+import { Account, Block, DelegateWeight, VoteWeights } from '../../src/types';
 import { BLOCK_TIME, EPOCH_TIME } from '../fixtures/constants';
 import { getDelegateAccounts } from '../utils/round_delegates';
 import { StateStoreMock } from '../utils/state_store_mock';
 import {
-	CONSENSUS_STATE_VOTE_WEIGHTS_KEY,
 	CONSENSUS_STATE_FORGERS_LIST_KEY,
+	CONSENSUS_STATE_VOTE_WEIGHTS_KEY,
 } from '../../src/constants';
 import { randomBigIntWithPowerof8 } from '../utils/random_int';
+
+// TODO: Removed after serialization of consensus state
+const parseVoteWeightStr = (voteWeightStr: string): VoteWeights => {
+	return (JSON.parse(voteWeightStr) as VoteWeights).map(voteWeight => ({
+		round: voteWeight.round,
+		delegates: voteWeight.delegates.map(d => ({
+			voteWeight: d.voteWeight,
+			address: Buffer.from(d.address.toString(), 'hex'),
+		})),
+	}));
+};
 
 describe('Vote weight snapshot', () => {
 	const forgers = getDelegateAccounts(103);
@@ -178,7 +189,9 @@ describe('Vote weight snapshot', () => {
 				const mockedForgersList = JSON.stringify([
 					{
 						round: 10,
-						delegates: [...forgers.map(d => d.address).slice(0, 102)],
+						delegates: [
+							...forgers.map(d => d.address.toString('hex')).slice(0, 102),
+						],
 					},
 				]);
 
@@ -187,7 +200,7 @@ describe('Vote weight snapshot', () => {
 						round: 11,
 						delegates: [
 							...delegates.map(d => ({
-								address: d.address,
+								address: d.address.toString('hex'),
 								voteWeight: d.totalVotesReceived.toString(),
 							})),
 						],
@@ -277,7 +290,9 @@ describe('Vote weight snapshot', () => {
 				const mockedForgersList = JSON.stringify([
 					{
 						round: 10,
-						delegates: [...forgers.map(d => d.address).slice(0, 102)],
+						delegates: [
+							...forgers.map(d => d.address.toString('hex')).slice(0, 102),
+						],
 					},
 				]);
 
@@ -286,7 +301,7 @@ describe('Vote weight snapshot', () => {
 						round: 11,
 						delegates: [
 							...delegates.map(d => ({
-								address: d.address,
+								address: d.address.toString('hex'),
 								voteWeight: d.totalVotesReceived.toString(),
 							})),
 						],
@@ -313,14 +328,19 @@ describe('Vote weight snapshot', () => {
 				const voteWeightsStr = await stateStore.consensus.get(
 					CONSENSUS_STATE_VOTE_WEIGHTS_KEY,
 				);
-				const voteWeights = JSON.parse(voteWeightsStr as string);
+
+				// TODO: Removed after serialization of consensus state
+				const voteWeights = parseVoteWeightStr(voteWeightsStr as string);
+
 				expect(voteWeights).toHaveLength(2);
 				expect(voteWeights[1].round).toEqual(13);
 				// 50 and the forger is in the list
 				expect(voteWeights[1].delegates).toHaveLength(50 + 1);
 				const originalDelegatesCounts = voteWeights[0].delegates.reduce(
-					(prev: number, current: Account) => {
-						const exist = delegates.find(d => d.address === current.address);
+					(prev: number, current: DelegateWeight) => {
+						const exist = delegates.find(d =>
+							d.address.equals(current.address),
+						);
 						return exist ? prev + 1 : prev;
 					},
 					0,
@@ -378,7 +398,9 @@ describe('Vote weight snapshot', () => {
 				const mockedForgersList = JSON.stringify([
 					{
 						round: 10,
-						delegates: [...forgers.map(d => d.address).slice(0, 102)],
+						delegates: [
+							...forgers.map(d => d.address.toString('hex')).slice(0, 102),
+						],
 					},
 				]);
 
@@ -387,7 +409,7 @@ describe('Vote weight snapshot', () => {
 						round: 11,
 						delegates: [
 							...delegates.map(d => ({
-								address: d.address,
+								address: d.address.toString('hex'),
 								voteWeight: d.totalVotesReceived.toString(),
 							})),
 						],
@@ -414,14 +436,16 @@ describe('Vote weight snapshot', () => {
 				const voteWeightsStr = await stateStore.consensus.get(
 					CONSENSUS_STATE_VOTE_WEIGHTS_KEY,
 				);
-				const voteWeights = JSON.parse(voteWeightsStr as string);
+				// TODO: Removed after serialization of consensus state
+				const voteWeights = parseVoteWeightStr(voteWeightsStr as string);
+
 				expect(voteWeights).toHaveLength(2);
 				expect(voteWeights[1].round).toEqual(13);
 				expect(voteWeights[1].delegates).toHaveLength(103);
 				expect(
 					additionalDelegates.every((delegate: Account) =>
-						voteWeights[1].delegates.find(
-							(d: Account) => d.address === delegate.address,
+						voteWeights[1].delegates.find((d: DelegateWeight) =>
+							d.address.equals(delegate.address),
 						),
 					),
 				).toBeTrue();
@@ -478,7 +502,7 @@ describe('Vote weight snapshot', () => {
 						round: 11,
 						delegates: [
 							...delegates.map(d => ({
-								address: d.address,
+								address: d.address.toString('hex'),
 								voteWeight: d.totalVotesReceived.toString(),
 							})),
 						],
@@ -488,7 +512,9 @@ describe('Vote weight snapshot', () => {
 				const mockedForgersList = JSON.stringify([
 					{
 						round: 10,
-						delegates: [...forgers.map(d => d.address).slice(0, 102)],
+						delegates: [
+							...forgers.map(d => d.address.toString('hex')).slice(0, 102),
+						],
 					},
 				]);
 
@@ -512,7 +538,8 @@ describe('Vote weight snapshot', () => {
 				const voteWeightsStr = await stateStore.consensus.get(
 					CONSENSUS_STATE_VOTE_WEIGHTS_KEY,
 				);
-				const voteWeights = JSON.parse(voteWeightsStr as string);
+				const voteWeights = parseVoteWeightStr(voteWeightsStr as string);
+
 				expect(voteWeights).toHaveLength(2);
 				expect(voteWeights[1].round).toEqual(13);
 				expect(voteWeights[1].delegates).toHaveLength(
@@ -520,8 +547,8 @@ describe('Vote weight snapshot', () => {
 				);
 				expect(
 					additionalDelegates.every((delegate: Account) =>
-						voteWeights[1].delegates.find(
-							(d: Account) => d.address === delegate.address,
+						voteWeights[1].delegates.find((d: DelegateWeight) =>
+							d.address.equals(delegate.address),
 						),
 					),
 				).toBeTrue();
@@ -583,7 +610,7 @@ describe('Vote weight snapshot', () => {
 						round: 11,
 						delegates: [
 							...delegates.map(d => ({
-								address: d.address,
+								address: d.address.toString('hex'),
 								voteWeight: d.totalVotesReceived.toString(),
 							})),
 						],
@@ -593,7 +620,9 @@ describe('Vote weight snapshot', () => {
 				const mockedForgersList = JSON.stringify([
 					{
 						round: 10,
-						delegates: [...forgers.map(d => d.address).slice(0, 102)],
+						delegates: [
+							...forgers.map(d => d.address.toString('hex')).slice(0, 102),
+						],
 					},
 				]);
 
@@ -617,12 +646,13 @@ describe('Vote weight snapshot', () => {
 				const voteWeightsStr = await stateStore.consensus.get(
 					CONSENSUS_STATE_VOTE_WEIGHTS_KEY,
 				);
-				const voteWeights = JSON.parse(voteWeightsStr as string);
+				const voteWeights = parseVoteWeightStr(voteWeightsStr as string);
+
 				expect(voteWeights).toHaveLength(2);
 				expect(voteWeights[1].round).toEqual(13);
 				expect(
-					voteWeights[1].delegates.find(
-						(d: Account) => d.address === nonSelfVotedDelegate.address,
+					voteWeights[1].delegates.find((d: DelegateWeight) =>
+						d.address.equals(nonSelfVotedDelegate.address),
 					),
 				).toBeUndefined();
 				expect(voteWeights[1].delegates).toHaveLength(
@@ -683,7 +713,9 @@ describe('Vote weight snapshot', () => {
 				const mockedForgersList = JSON.stringify([
 					{
 						round: 10,
-						delegates: [...forgers.map(d => d.address).slice(0, 102)],
+						delegates: [
+							...forgers.map(d => d.address.toString('hex')).slice(0, 102),
+						],
 					},
 				]);
 
@@ -692,7 +724,7 @@ describe('Vote weight snapshot', () => {
 						round: 11,
 						delegates: [
 							...delegates.map(d => ({
-								address: d.address,
+								address: d.address.toString('hex'),
 								voteWeight: d.totalVotesReceived.toString(),
 							})),
 						],
@@ -719,12 +751,12 @@ describe('Vote weight snapshot', () => {
 				const voteWeightsStr = await stateStore.consensus.get(
 					CONSENSUS_STATE_VOTE_WEIGHTS_KEY,
 				);
-				const voteWeights = JSON.parse(voteWeightsStr as string);
+				const voteWeights = parseVoteWeightStr(voteWeightsStr as string);
 				expect(voteWeights).toHaveLength(2);
 				expect(voteWeights[1].round).toEqual(13);
 				expect(
-					voteWeights[1].delegates.find(
-						(d: Account) => d.address === bannedDelegate.address,
+					voteWeights[1].delegates.find((d: DelegateWeight) =>
+						d.address.equals(bannedDelegate.address),
 					),
 				).toBeUndefined();
 				expect(voteWeights[1].delegates).toHaveLength(
@@ -774,8 +806,12 @@ describe('Vote weight snapshot', () => {
 				const mockedForgersList = JSON.stringify([
 					{
 						round: 10,
-						delegates: [...forgers.map(d => d.address).slice(0, 100)],
-						standby: [...forgers.map(d => d.address).slice(101, 102)],
+						delegates: [
+							...forgers.map(d => d.address.toString('hex')).slice(0, 100),
+						],
+						standby: [
+							...forgers.map(d => d.address.toString('hex')).slice(101, 102),
+						],
 					},
 				]);
 
@@ -784,13 +820,13 @@ describe('Vote weight snapshot', () => {
 						round: 11,
 						delegates: [
 							...delegates.slice(0, 100).map(d => ({
-								address: d.address,
+								address: d.address.toString('hex'),
 								voteWeight: d.totalVotesReceived.toString(),
 							})),
 						],
 						standby: [
 							...delegates.slice(101, 102).map(d => ({
-								address: d.address,
+								address: d.address.toString('hex'),
 								voteWeight: d.totalVotesReceived.toString(),
 							})),
 						],
@@ -817,13 +853,15 @@ describe('Vote weight snapshot', () => {
 				const voteWeightsStr = await stateStore.consensus.get(
 					CONSENSUS_STATE_VOTE_WEIGHTS_KEY,
 				);
-				const voteWeights = JSON.parse(voteWeightsStr as string);
+				const voteWeights = parseVoteWeightStr(voteWeightsStr as string);
 				expect(voteWeights).toHaveLength(2);
 				expect(voteWeights[1].round).toEqual(13);
 				const snapshotedPunishedDelegate = voteWeights[1].delegates.find(
-					(d: Account) => d.address === punishedDelegate.address,
+					(d: DelegateWeight) => d.address.equals(punishedDelegate.address),
 				);
-				expect(snapshotedPunishedDelegate.voteWeight).toEqual('0');
+				expect(
+					(snapshotedPunishedDelegate as DelegateWeight).voteWeight,
+				).toEqual('0');
 				expect(voteWeights[1].delegates).toHaveLength(103);
 			});
 		});
@@ -880,7 +918,9 @@ describe('Vote weight snapshot', () => {
 				const mockedForgersList = JSON.stringify([
 					{
 						round: 10,
-						delegates: [...forgers.map(d => d.address).slice(0, 102)],
+						delegates: [
+							...forgers.map(d => d.address.toString('hex')).slice(0, 102),
+						],
 					},
 				]);
 
@@ -889,7 +929,7 @@ describe('Vote weight snapshot', () => {
 						round: 11,
 						delegates: [
 							...delegates.map(d => ({
-								address: d.address,
+								address: d.address.toString('hex'),
 								voteWeight: d.totalVotesReceived.toString(),
 							})),
 						],
@@ -916,12 +956,12 @@ describe('Vote weight snapshot', () => {
 				const voteWeightsStr = await stateStore.consensus.get(
 					CONSENSUS_STATE_VOTE_WEIGHTS_KEY,
 				);
-				const voteWeights = JSON.parse(voteWeightsStr as string);
+				const voteWeights = parseVoteWeightStr(voteWeightsStr as string);
 				expect(voteWeights).toHaveLength(2);
 				expect(voteWeights[1].round).toEqual(13);
 				expect(
-					voteWeights[1].delegates.find(
-						(d: Account) => d.address === punishedDelegate.address,
+					voteWeights[1].delegates.find((d: DelegateWeight) =>
+						d.address.equals(punishedDelegate.address),
 					),
 				).toBeUndefined();
 				expect(voteWeights[1].delegates).toHaveLength(
@@ -960,42 +1000,42 @@ describe('Vote weight snapshot', () => {
 					{
 						round: 11,
 						delegates: delegates.map(d => ({
-							address: d.address,
+							address: d.address.toString('hex'),
 							voteWeight: '0',
 						})),
 					},
 					{
 						round: 12,
 						delegates: delegates.map(d => ({
-							address: d.address,
+							address: d.address.toString('hex'),
 							voteWeight: '0',
 						})),
 					},
 					{
 						round: 13,
 						delegates: delegates.map(d => ({
-							address: d.address,
+							address: d.address.toString('hex'),
 							voteWeight: '0',
 						})),
 					},
 					{
 						round: 14,
 						delegates: delegates.map(d => ({
-							address: d.address,
+							address: d.address.toString('hex'),
 							voteWeight: '0',
 						})),
 					},
 					{
 						round: 15,
 						delegates: delegates.map(d => ({
-							address: d.address,
+							address: d.address.toString('hex'),
 							voteWeight: '0',
 						})),
 					},
 					{
 						round: 16,
 						delegates: delegates.map(d => ({
-							address: d.address,
+							address: d.address.toString('hex'),
 							voteWeight: '0',
 						})),
 					},
@@ -1004,7 +1044,9 @@ describe('Vote weight snapshot', () => {
 				const mockedForgersList = JSON.stringify([
 					{
 						round: 10,
-						delegates: [...forgers.map(d => d.address).slice(0, 102)],
+						delegates: [
+							...forgers.map(d => d.address.toString('hex')).slice(0, 102),
+						],
 					},
 				]);
 
@@ -1022,7 +1064,7 @@ describe('Vote weight snapshot', () => {
 				const voteWeightsStr = await stateStore.consensus.get(
 					CONSENSUS_STATE_VOTE_WEIGHTS_KEY,
 				);
-				const voteWeights = JSON.parse(voteWeightsStr as string);
+				const voteWeights = parseVoteWeightStr(voteWeightsStr as string);
 				expect(voteWeights).toHaveLength(2);
 				expect(voteWeights[0].round).toEqual(11);
 				expect(voteWeights[1].round).toEqual(12);

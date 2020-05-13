@@ -109,7 +109,7 @@ export class Dpos {
 
 	public async getForgerAddressesForRound(
 		round: number,
-	): Promise<ReadonlyArray<string>> {
+	): Promise<ReadonlyArray<Buffer>> {
 		return this.delegatesList.getDelegateList(round);
 	}
 
@@ -128,7 +128,7 @@ export class Dpos {
 
 	public async getMinActiveHeight(
 		height: number,
-		address: string,
+		address: Buffer,
 		stateStore: StateStore,
 		delegateActiveRoundLimit?: number,
 	): Promise<number> {
@@ -157,17 +157,24 @@ export class Dpos {
 	}
 
 	public async isActiveDelegate(
-		address: string,
+		address: Buffer,
 		height: number,
 	): Promise<boolean> {
 		const relevantRound = this.rounds.calcRound(height);
 		const voteWeightsStr = await this.chain.dataAccess.getConsensusState(
 			CONSENSUS_STATE_VOTE_WEIGHTS_KEY,
 		);
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-		const voteWeights: VoteWeights = voteWeightsStr
-			? JSON.parse(voteWeightsStr)
-			: [];
+
+		// TODO: Removed after serialization of consensus state
+		const voteWeights: VoteWeights = (JSON.parse(
+			voteWeightsStr as string,
+		) as VoteWeights).map(voteWeight => ({
+			round: voteWeight.round,
+			delegates: voteWeight.delegates.map(d => ({
+				voteWeight: d.voteWeight,
+				address: Buffer.from(d.address.toString(), 'hex'),
+			})),
+		}));
 
 		const voteWeight = voteWeights.find(
 			roundRecord => roundRecord.round === relevantRound,
@@ -184,12 +191,12 @@ export class Dpos {
 		);
 
 		return (
-			activeDelegateVoteWeights.findIndex(vw => vw.address === address) > -1
+			activeDelegateVoteWeights.findIndex(vw => vw.address.equals(address)) > -1
 		);
 	}
 
 	public async isStandbyDelegate(
-		address: string,
+		address: Buffer,
 		height: number,
 		stateStore: StateStore,
 	): Promise<boolean> {
@@ -205,8 +212,8 @@ export class Dpos {
 			);
 		}
 
-		const isStandby = foundForgerList.standby.find(
-			standByDelegate => standByDelegate === address,
+		const isStandby = foundForgerList.standby.find(standByDelegate =>
+			standByDelegate.equals(address),
 		);
 
 		return !!isStandby;
@@ -293,7 +300,7 @@ export class Dpos {
 	 * in descending order.
 	 */
 	private _findEarliestActiveListRound(
-		address: string,
+		address: Buffer,
 		previousLists: ForgersList,
 		delegateActiveRoundLimit: number = this.delegateActiveRoundLimit,
 	): number {
@@ -308,7 +315,7 @@ export class Dpos {
 		for (let i = 0; i < lists.length; i += 1) {
 			const { round, delegates } = lists[i];
 
-			if (!delegates.includes(address)) {
+			if (!delegates.find(d => d.equals(address))) {
 				// Since we are iterating backwards,
 				// If the delegate is not in this list
 				// That means delegate was in the next round :)

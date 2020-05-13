@@ -14,10 +14,10 @@
 
 export interface StateStore {
 	readonly account: {
-		readonly get: (primaryValue: string) => Promise<Account>;
+		readonly get: (primaryValue: Buffer) => Promise<Account>;
 		readonly getUpdated: () => ReadonlyArray<Account>;
 		// eslint-disable-next-line @typescript-eslint/method-signature-style
-		set(key: string, value: Account): void;
+		set(key: Buffer, value: Account): void;
 	};
 	readonly consensus: {
 		readonly get: (key: string) => Promise<string | undefined>;
@@ -42,12 +42,12 @@ export interface Block extends BlockHeader {
 }
 
 interface Vote {
-	readonly delegateAddress: string;
+	readonly delegateAddress: Buffer;
 	readonly amount: bigint;
 }
 
 export interface Account {
-	readonly address: string;
+	readonly address: Buffer;
 	totalVotesReceived: bigint;
 	readonly delegate: {
 		readonly isBanned: boolean;
@@ -84,7 +84,7 @@ export interface Chain {
 }
 
 export interface DelegateWeight {
-	readonly address: string;
+	readonly address: Buffer;
 	readonly voteWeight: string;
 }
 
@@ -95,8 +95,8 @@ export interface VoteWeight {
 
 export interface ForgerList {
 	readonly round: number;
-	readonly delegates: ReadonlyArray<string>;
-	readonly standby: ReadonlyArray<string>;
+	readonly delegates: ReadonlyArray<Buffer>;
+	readonly standby: ReadonlyArray<Buffer>;
 }
 
 export type ForgersList = ForgerList[];
