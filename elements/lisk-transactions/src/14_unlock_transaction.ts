@@ -25,7 +25,7 @@ import { Account, TransactionJSON } from './transaction_types';
 import { getPunishmentPeriod, sortUnlocking } from './utils';
 
 export interface Unlock {
-	readonly delegateAddress: string;
+	readonly delegateAddress: Buffer;
 	readonly amount: bigint;
 	readonly unvoteHeight: number;
 }
@@ -66,7 +66,6 @@ const unlockAssetFormatSchema = {
 
 const SIZE_UINT32 = 4;
 const SIZE_INT64 = 8;
-const SIZE_UINT64 = SIZE_INT64;
 const AMOUNT_MULTIPLIER_FOR_VOTES = BigInt(10) * BigInt(10) ** BigInt(8);
 const WAIT_TIME_VOTE = 2000;
 const WAIT_TIME_SELF_VOTE = 260000;
@@ -114,7 +113,8 @@ export class UnlockTransaction extends BaseTransaction {
 						: BigInt(0);
 
 					return {
-						delegateAddress: unlock.delegateAddress,
+						// TODO: Raw asset may include base64 encoded value for delegateAddress
+						delegateAddress: Buffer.from(unlock.delegateAddress),
 						amount,
 						unvoteHeight: unlock.unvoteHeight,
 					};
@@ -152,11 +152,7 @@ export class UnlockTransaction extends BaseTransaction {
 	protected assetToBytes(): Buffer {
 		const bufferArray = [];
 		for (const unlock of this.asset.unlockingObjects) {
-			const addressBuffer = intToBuffer(
-				unlock.delegateAddress.slice(0, -1),
-				SIZE_UINT64,
-			);
-			bufferArray.push(addressBuffer);
+			bufferArray.push(unlock.delegateAddress);
 			const amountBuffer = intToBuffer(
 				unlock.amount.toString(),
 				SIZE_INT64,

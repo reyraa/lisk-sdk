@@ -26,7 +26,7 @@ import { TransactionJSON } from './transaction_types';
 import { sortUnlocking } from './utils';
 
 export interface Vote {
-	readonly delegateAddress: string;
+	readonly delegateAddress: Buffer;
 	readonly amount: bigint;
 }
 
@@ -61,7 +61,6 @@ const voteAssetFormatSchema = {
 };
 
 const SIZE_INT64 = 8;
-const SIZE_UINT64 = SIZE_INT64;
 const TEN_UNIT = BigInt(10) * BigInt(10) ** BigInt(8);
 const MAX_VOTE = 10;
 const MAX_UNLOCKING = 20;
@@ -93,7 +92,8 @@ export class VoteTransaction extends BaseTransaction {
 						: BigInt(0);
 
 					return {
-						delegateAddress: vote.delegateAddress,
+						// TODO: Raw asset may include base64 encoded value for delegateAddress
+						delegateAddress: Buffer.from(vote.delegateAddress, 'hex'),
 						amount,
 					};
 				}),
@@ -129,11 +129,7 @@ export class VoteTransaction extends BaseTransaction {
 	protected assetToBytes(): Buffer {
 		const bufferArray = [];
 		for (const vote of this.asset.votes) {
-			const addressBuffer = intToBuffer(
-				vote.delegateAddress.slice(0, -1),
-				SIZE_UINT64,
-			);
-			bufferArray.push(addressBuffer);
+			bufferArray.push(vote.delegateAddress);
 			const amountBuffer = intToBuffer(
 				vote.amount.toString(),
 				SIZE_INT64,
@@ -223,7 +219,7 @@ export class VoteTransaction extends BaseTransaction {
 	): Promise<ReadonlyArray<TransactionError>> {
 		// Only order should be change, so no need to copy object itself
 		const assetCopy = [...this.asset.votes];
-		// Sort by acending amount
+		// Sort by ascending amount
 		assetCopy.sort((a, b) => {
 			const diff = a.amount - b.amount;
 			if (diff > BigInt(0)) {
@@ -334,7 +330,7 @@ export class VoteTransaction extends BaseTransaction {
 				sender.votes[index] = upvote;
 				// Sort account.votes
 				sender.votes.sort((a, b) =>
-					a.delegateAddress.localeCompare(b.delegateAddress, 'en'),
+					Buffer.compare(a.delegateAddress, b.delegateAddress),
 				);
 				if (sender.votes.length > MAX_VOTE) {
 					errors.push(
@@ -408,7 +404,7 @@ export class VoteTransaction extends BaseTransaction {
 
 				// Sort votes in case of readding
 				sender.votes.sort((a, b) =>
-					a.delegateAddress.localeCompare(b.delegateAddress, 'en'),
+					Buffer.compare(a.delegateAddress, b.delegateAddress),
 				);
 				// Sort account.unlocking
 				sortUnlocking(sender.unlocking);
@@ -426,7 +422,7 @@ export class VoteTransaction extends BaseTransaction {
 				sender.balance += vote.amount;
 				// Sort account.votes
 				sender.votes.sort((a, b) =>
-					a.delegateAddress.localeCompare(b.delegateAddress, 'en'),
+					Buffer.compare(a.delegateAddress, b.delegateAddress),
 				);
 			}
 			store.account.set(sender.address, sender);

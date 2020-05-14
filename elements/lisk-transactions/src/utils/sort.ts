@@ -30,7 +30,7 @@ export const sortKeysAscending = (publicKeys: string[]): string[] =>
 export const sortUnlocking = (unlockings: AccountUnlocking[]): void => {
 	unlockings.sort((a, b) => {
 		if (a.delegateAddress !== b.delegateAddress) {
-			return a.delegateAddress.localeCompare(b.delegateAddress, 'en');
+			return Buffer.compare(a.delegateAddress, b.delegateAddress);
 		}
 		if (a.unvoteHeight !== b.unvoteHeight) {
 			return b.unvoteHeight - a.unvoteHeight;

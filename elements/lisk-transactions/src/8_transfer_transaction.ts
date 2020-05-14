@@ -31,7 +31,7 @@ import { verifyMinRemainingBalance } from './utils';
 
 export interface TransferAsset {
 	readonly data?: string;
-	readonly recipientId: string;
+	readonly recipientId: Buffer;
 	readonly amount: bigint;
 }
 
@@ -75,7 +75,7 @@ export class TransferTransaction extends BaseTransaction {
 			const rawAsset = tx.asset as RawAsset;
 			this.asset = {
 				data: rawAsset.data,
-				recipientId: rawAsset.recipientId,
+				recipientId: Buffer.from(rawAsset.recipientId, 'hex'),
 				amount: BigInt(
 					isPositiveNumberString(rawAsset.amount) ? rawAsset.amount : '0',
 				),
@@ -83,7 +83,7 @@ export class TransferTransaction extends BaseTransaction {
 		} else {
 			this.asset = {
 				amount: BigInt('0'),
-				recipientId: '',
+				recipientId: Buffer.alloc(0),
 			} as TransferAsset;
 		}
 	}
@@ -92,7 +92,7 @@ export class TransferTransaction extends BaseTransaction {
 		return {
 			data: this.asset.data,
 			amount: this.asset.amount.toString(),
-			recipientId: this.asset.recipientId,
+			recipientId: this.asset.recipientId.toString('hex'),
 		};
 	}
 
@@ -113,12 +113,10 @@ export class TransferTransaction extends BaseTransaction {
 			BYTESIZES.AMOUNT,
 			'big',
 		);
-		const transactionRecipientID = this.asset.recipientId
-			? intToBuffer(
-					this.asset.recipientId.slice(0, -1),
-					BYTESIZES.RECIPIENT_ID,
-			  ).slice(0, BYTESIZES.RECIPIENT_ID)
-			: Buffer.alloc(0);
+		const transactionRecipientID =
+			this.asset.recipientId !== undefined
+				? this.asset.recipientId
+				: Buffer.alloc(0);
 
 		const dataBuffer = this.asset.data
 			? stringToBuffer(this.asset.data)
@@ -150,7 +148,7 @@ export class TransferTransaction extends BaseTransaction {
 			);
 		}
 
-		if (!this.asset.recipientId) {
+		if (this.asset.recipientId === undefined) {
 			errors.push(
 				new TransactionError(
 					'`recipientId` must be provided.',

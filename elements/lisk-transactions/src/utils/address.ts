@@ -18,18 +18,18 @@ import { TransactionError } from '../errors';
 
 export const validateSenderIdAndPublicKey = (
 	id: string,
-	senderId: string,
+	senderId: Buffer,
 	senderPublicKey: string,
 ): TransactionError | undefined => {
 	const actualAddress = getAddressFromPublicKey(senderPublicKey);
 
-	return senderId.toUpperCase() !== actualAddress.toUpperCase()
+	return senderId !== actualAddress
 		? new TransactionError(
 				'`senderId` does not match `senderPublicKey`',
 				id,
 				'.senderId',
-				actualAddress,
-				senderId,
+				actualAddress.toString('hex'),
+				senderId.toString('hdex'),
 		  )
 		: undefined;
 };

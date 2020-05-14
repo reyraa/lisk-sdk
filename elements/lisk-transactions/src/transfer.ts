@@ -33,7 +33,7 @@ export interface TransferInputs {
 	readonly nonce: string;
 	readonly networkIdentifier: string;
 	readonly data?: string;
-	readonly recipientId?: string;
+	readonly recipientId?: Buffer;
 	readonly recipientPublicKey?: string;
 	readonly senderPublicKey?: string;
 	readonly passphrase?: string;
@@ -128,7 +128,7 @@ export const transfer = (inputs: TransferInputs): Partial<TransactionJSON> => {
 		senderPublicKey,
 		asset: {
 			amount,
-			recipientId: recipientId as string,
+			recipientId,
 			data,
 		},
 	};
@@ -142,7 +142,7 @@ export const transfer = (inputs: TransferInputs): Partial<TransactionJSON> => {
 		senderPublicKey: transaction.senderPublicKey as string,
 		asset: {
 			...transaction.asset,
-			recipientId: recipientId as string,
+			recipientId,
 		},
 	};
 

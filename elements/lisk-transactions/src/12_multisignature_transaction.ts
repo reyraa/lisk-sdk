@@ -107,7 +107,9 @@ export class MultisignatureTransaction extends BaseTransaction {
 		const membersAddresses = [
 			...this.asset.mandatoryKeys,
 			...this.asset.optionalKeys,
-		].map(publicKey => ({ address: getAddressFromPublicKey(publicKey) }));
+		].map(publicKey => ({
+			address: getAddressFromPublicKey(publicKey),
+		}));
 
 		await store.account.cache([
 			{

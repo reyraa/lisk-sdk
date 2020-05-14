@@ -56,19 +56,19 @@ export interface TransactionResponse {
 export interface StateStorePrepare {
 	readonly account: {
 		cache(
-			filterArray: ReadonlyArray<{ readonly [key: string]: string }>,
+			filterArray: ReadonlyArray<{ readonly [key: string]: Buffer | string }>,
 		): Promise<ReadonlyArray<Account>>;
 	};
 }
 
 export interface AccountState {
 	cache(
-		filterArray: ReadonlyArray<{ readonly [key: string]: string }>,
+		filterArray: ReadonlyArray<{ readonly [key: string]: string | Buffer }>,
 	): Promise<ReadonlyArray<Account>>;
-	get(key: string): Promise<Account>;
-	getOrDefault(key: string): Promise<Account>;
+	get(key: Buffer): Promise<Account>;
+	getOrDefault(key: Buffer): Promise<Account>;
 	find(func: (item: Account) => boolean): Account | undefined;
-	set(key: string, value: Account): void;
+	set(key: Buffer, value: Account): void;
 }
 /* eslint-enable @typescript-eslint/method-signature-style */
 
@@ -82,9 +82,6 @@ export interface StateStore {
 	readonly account: AccountState;
 	readonly chain: ChainState;
 }
-
-export const ENTITY_ACCOUNT = 'account';
-export const ENTITY_TRANSACTION = 'transaction';
 
 export abstract class BaseTransaction {
 	public static TYPE: number;
@@ -148,7 +145,7 @@ export abstract class BaseTransaction {
 		return this._minFee;
 	}
 
-	public get senderId(): string {
+	public get senderId(): Buffer {
 		return getAddressFromPublicKey(this.senderPublicKey);
 	}
 
@@ -158,22 +155,20 @@ export abstract class BaseTransaction {
 	 */
 
 	public toJSON(): TransactionJSON {
-		const transaction = {
+		return {
 			id: this._id,
 			blockId: this.blockId,
 			height: this.height,
 			confirmations: this.confirmations,
 			type: this.type,
 			senderPublicKey: this.senderPublicKey,
-			senderId: this.senderPublicKey ? this.senderId : '',
+			senderId: this.senderPublicKey ? this.senderId.toString('hex') : '',
 			nonce: this.nonce.toString(),
 			fee: this.fee.toString(),
 			signatures: this.signatures,
 			asset: this.assetToJSON(),
 			receivedAt: this.receivedAt ? this.receivedAt.toISOString() : undefined,
 		};
-
-		return transaction;
 	}
 
 	public stringify(): string {
@@ -181,12 +176,10 @@ export abstract class BaseTransaction {
 	}
 
 	public getBytes(): Buffer {
-		const transactionBytes = Buffer.concat([
+		return Buffer.concat([
 			this.getBasicBytes(),
 			serializeSignatures(this.signatures),
 		]);
-
-		return transactionBytes;
 	}
 
 	public validate(): TransactionResponse {

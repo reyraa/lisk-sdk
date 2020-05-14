@@ -15,16 +15,16 @@
 import { TransactionError } from './errors';
 
 export interface AccountVote {
-	readonly delegateAddress: string;
+	readonly delegateAddress: Buffer;
 	amount: bigint;
 }
 export interface AccountUnlocking {
-	readonly delegateAddress: string;
+	readonly delegateAddress: Buffer;
 	readonly amount: bigint;
 	readonly unvoteHeight: number;
 }
 export interface Account {
-	readonly address: string;
+	readonly address: Buffer;
 	balance: bigint;
 	nonce: bigint;
 	missedBlocks: number;
@@ -91,6 +91,7 @@ export interface TransactionJSON {
 	readonly height?: number;
 	readonly confirmations?: number;
 	readonly senderPublicKey: string;
+	readonly senderId: string;
 	readonly signatures?: ReadonlyArray<string>;
 	readonly type: number;
 	readonly receivedAt?: string;

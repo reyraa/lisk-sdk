@@ -160,7 +160,7 @@ export class ProofOfMisbehaviorTransaction extends BaseTransaction {
 	public async prepare(store: StateStorePrepare): Promise<void> {
 		const delegateAddress = getAddressFromPublicKey(
 			this.asset.header1.generatorPublicKey,
-		);
+		).toString('hex');
 
 		const filterArray = [
 			{
