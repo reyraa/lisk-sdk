@@ -29,12 +29,12 @@ export type BlockHeaderWithID = BlockHeader & { readonly id: string };
 export interface DPoS {
 	getMinActiveHeight(
 		height: number,
-		address: string,
+		address: Buffer,
 		stateStore: StateStore,
 		delegateActiveRoundLimit?: number,
 	): Promise<number>;
 	isStandbyDelegate(
-		address: string,
+		address: Buffer,
 		height: number,
 		stateStore: StateStore,
 	): Promise<boolean>;
