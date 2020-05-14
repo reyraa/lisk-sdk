@@ -47,7 +47,7 @@ const processInputs = (
 	fee: string,
 	networkIdentifier: string,
 	amount: string,
-	address: string,
+	address: Buffer,
 	data?: string,
 	passphrase?: string,
 ) =>
@@ -141,7 +141,8 @@ export default class TransferCommand extends BaseCommand {
 				normalizedFee,
 				networkIdentifier,
 				normalizedAmount,
-				address,
+				// TODO: Need to update format - https://github.com/LiskHQ/lisk-sdk/issues/5177
+				Buffer.from(address, 'hex'),
 				dataString,
 			);
 			this.print(noSignatureResult);
@@ -156,7 +157,8 @@ export default class TransferCommand extends BaseCommand {
 			normalizedFee,
 			networkIdentifier,
 			normalizedAmount,
-			address,
+			// TODO: Need to update format - https://github.com/LiskHQ/lisk-sdk/issues/5177
+			Buffer.from(address, 'hex'),
 			dataString,
 			passphrase,
 		);

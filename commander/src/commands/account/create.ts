@@ -20,7 +20,7 @@ import BaseCommand from '../../base';
 import { createMnemonicPassphrase } from '../../utils/mnemonic';
 
 interface AccountInfo {
-	readonly address: string;
+	readonly address: Buffer;
 	readonly passphrase: string;
 	readonly privateKey: string;
 	readonly publicKey: string;

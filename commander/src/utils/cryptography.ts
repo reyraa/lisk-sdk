@@ -93,7 +93,7 @@ export const { getKeys } = cryptography;
 
 export const getAddressFromPublicKey = (
 	publicKey: string,
-): { readonly address: string } => ({
+): { readonly address: Buffer } => ({
 	address: cryptography.getAddressFromPublicKey(publicKey),
 });
 

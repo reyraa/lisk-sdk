@@ -22,7 +22,7 @@ import { getPassphraseFromPrompt } from '../../utils/reader';
 
 const processInput = (
 	passphrase: string,
-): { privateKey: string; publicKey: string; address: string } => {
+): { privateKey: string; publicKey: string; address: Buffer } => {
 	const { privateKey, publicKey } = getKeys(passphrase);
 	const address = getAddressFromPublicKey(publicKey);
 

@@ -69,6 +69,10 @@ export class HighFeeForgingStrategy {
 			// Get the transaction with highest fee and lowest nonce
 			const lowestNonceHighestFeeTrx = feePriorityHeap.pop()
 				?.value as BaseTransaction;
+
+			const lowestNonceHighestFeeTrxSenderId = lowestNonceHighestFeeTrx.senderId.toString(
+				'hex',
+			);
 			// Try to process transaction
 			const result = await this._chainModule.applyTransactionsWithStateStore(
 				[lowestNonceHighestFeeTrx],
@@ -78,7 +82,7 @@ export class HighFeeForgingStrategy {
 			// If transaction can't be processed then discard all transactions
 			// from that account as other transactions will be higher nonce
 			if (result[0].status !== TransactionStatus.OK) {
-				delete transactionsBySender[lowestNonceHighestFeeTrx.senderId];
+				delete transactionsBySender[lowestNonceHighestFeeTrxSenderId];
 
 				// eslint-disable-next-line no-continue
 				continue;
@@ -103,16 +107,14 @@ export class HighFeeForgingStrategy {
 			// as original array is readonly in future when we convert it to
 			// typescript the `splice` will not work so why used destruction
 			const [, ...choppedArray] = transactionsBySender[
-				lowestNonceHighestFeeTrx.senderId
+				lowestNonceHighestFeeTrxSenderId
 			];
-			transactionsBySender[lowestNonceHighestFeeTrx.senderId] = choppedArray;
+			transactionsBySender[lowestNonceHighestFeeTrxSenderId] = choppedArray;
 
 			// If there is no transaction left in heap for that account
 			// then remove that account from map
-			if (
-				transactionsBySender[lowestNonceHighestFeeTrx.senderId].length === 0
-			) {
-				delete transactionsBySender[lowestNonceHighestFeeTrx.senderId];
+			if (transactionsBySender[lowestNonceHighestFeeTrxSenderId].length === 0) {
+				delete transactionsBySender[lowestNonceHighestFeeTrxSenderId];
 
 				// eslint-disable-next-line no-continue
 				continue;
@@ -120,7 +122,7 @@ export class HighFeeForgingStrategy {
 
 			// Pick next lowest transaction from same account and push to fee queue
 			const nextLowestNonceTransaction =
-				transactionsBySender[lowestNonceHighestFeeTrx.senderId][0];
+				transactionsBySender[lowestNonceHighestFeeTrxSenderId][0];
 			feePriorityHeap.push(
 				nextLowestNonceTransaction.feePriority as bigint,
 				nextLowestNonceTransaction,
