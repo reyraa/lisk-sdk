@@ -186,7 +186,7 @@ export class TransactionPool {
 
 		const incomingTxAddress = getAddressFromPublicKey(
 			incomingTx.senderPublicKey,
-		);
+		).toString('hex');
 
 		// _applyFunction is injected from chain module applyTransaction
 		const transactionsResponses = await this._applyFunction([incomingTx]);
@@ -272,7 +272,9 @@ export class TransactionPool {
 
 		delete this._allTransactions[tx.id];
 		debug('Removing from transaction pool with id', tx.id);
-		const senderId = getAddressFromPublicKey(foundTx.senderPublicKey);
+		const senderId = getAddressFromPublicKey(foundTx.senderPublicKey).toString(
+			'hex',
+		);
 		this._transactionList[senderId].remove(tx.nonce);
 		if (this._transactionList[senderId].size === 0) {
 			delete this._transactionList[senderId];
