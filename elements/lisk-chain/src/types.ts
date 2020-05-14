@@ -165,6 +165,7 @@ export interface StorageFilter {
 		| number[]
 		| ReadonlyArray<number>
 		| boolean
+		| Buffer
 		| null;
 }
 

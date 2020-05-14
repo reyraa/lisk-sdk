@@ -43,18 +43,18 @@ export const accountDefaultValues = {
 };
 
 interface Vote {
-	readonly delegateAddress: string;
+	readonly delegateAddress: Buffer;
 	amount: bigint;
 }
 
 interface Unlocking {
-	readonly delegateAddress: string;
+	readonly delegateAddress: Buffer;
 	readonly amount: bigint;
 	readonly unvoteHeight: number;
 }
 
 export class Account {
-	public address: string;
+	public address: Buffer;
 	public balance: bigint;
 	public nonce: bigint;
 	public fees: bigint;
@@ -82,7 +82,8 @@ export class Account {
 	public isDelegate: number;
 
 	public constructor(accountInfo: AccountJSON) {
-		this.address = accountInfo.address;
+		// TODO Need to use base32 format https://github.com/LiskHQ/lisk-sdk/issues/5177
+		this.address = Buffer.from(accountInfo.address, 'hex');
 		this.balance = accountInfo.balance
 			? BigInt(accountInfo.balance)
 			: BigInt(0);
@@ -97,13 +98,13 @@ export class Account {
 		this.asset = accountInfo.asset;
 		this.votes = accountInfo.votes?.length
 			? accountInfo.votes.map(vote => ({
-					delegateAddress: vote.delegateAddress,
+					delegateAddress: Buffer.from(vote.delegateAddress, 'hex'),
 					amount: BigInt(vote.amount),
 			  }))
 			: [];
 		this.unlocking = accountInfo.unlocking?.length
 			? accountInfo.unlocking.map(unlock => ({
-					delegateAddress: unlock.delegateAddress,
+					delegateAddress: Buffer.from(unlock.delegateAddress, 'hex'),
 					amount: BigInt(unlock.amount),
 					unvoteHeight: unlock.unvoteHeight,
 			  }))
@@ -134,15 +135,16 @@ export class Account {
 		this.isDelegate = accountInfo.isDelegate;
 	}
 
-	public static getDefaultAccount = (address: string): Account =>
+	public static getDefaultAccount = (address: Buffer): Account =>
 		new Account({
-			address,
+			address: address.toString('hex'),
 			...accountDefaultValues,
 		});
 
 	public toJSON(): AccountJSON {
 		return {
-			address: this.address,
+			// TODO: Use base32 format https://github.com/LiskHQ/lisk-sdk/issues/5177
+			address: this.address.toString('hex'),
 			publicKey: this.publicKey,
 			username: this.username,
 			balance: this.balance.toString(),
@@ -153,11 +155,11 @@ export class Account {
 			totalVotesReceived: this.totalVotesReceived.toString(),
 			asset: this.asset,
 			votes: this.votes.map(v => ({
-				delegateAddress: v.delegateAddress,
+				delegateAddress: v.delegateAddress.toString('hex'),
 				amount: v.amount.toString(),
 			})),
 			unlocking: this.unlocking.map(v => ({
-				delegateAddress: v.delegateAddress,
+				delegateAddress: v.delegateAddress.toString('hex'),
 				amount: v.amount.toString(),
 				unvoteHeight: v.unvoteHeight,
 			})),
