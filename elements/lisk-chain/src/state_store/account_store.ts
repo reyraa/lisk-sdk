@@ -71,7 +71,7 @@ export class AccountStore {
 		this._originalUpdatedKeys = {};
 	}
 
-	public async get(primaryValue: string): Promise<Account> {
+	public async get(primaryValue: Buffer): Promise<Account> {
 		// Account was cached previously so we can return it from memory
 		const element = this._data.find(
 			item => item[this._primaryKey] === primaryValue,
@@ -96,11 +96,13 @@ export class AccountStore {
 
 		// Account does not exist we can not continue
 		throw new Error(
-			`${this._name} with ${this._primaryKey} = ${primaryValue} does not exist`,
+			`${this._name} with ${this._primaryKey} = ${primaryValue.toString(
+				'hex',
+			)} does not exist`,
 		);
 	}
 
-	public async getOrDefault(primaryValue: string): Promise<Account> {
+	public async getOrDefault(primaryValue: Buffer): Promise<Account> {
 		// Account was cached previously so we can return it from memory
 		const element = this._data.find(
 			item => item[this._primaryKey] === primaryValue,
@@ -145,14 +147,16 @@ export class AccountStore {
 		return new Account(foundAccount.toJSON());
 	}
 
-	public set(primaryValue: string, updatedElement: Account): void {
+	public set(primaryValue: Buffer, updatedElement: Account): void {
 		const elementIndex = this._data.findIndex(
 			item => item[this._primaryKey] === primaryValue,
 		);
 
 		if (elementIndex === -1) {
 			throw new Error(
-				`${this._name} with ${this._primaryKey} = ${primaryValue} does not exist`,
+				`${this._name} with ${this._primaryKey} = ${primaryValue.toString(
+					'hex',
+				)} does not exist`,
 			);
 		}
 
