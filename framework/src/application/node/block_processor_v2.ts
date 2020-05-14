@@ -348,7 +348,7 @@ export class BlockProcessorV2 extends BaseBlockProcessor {
 				// eslint-disable-next-line @typescript-eslint/restrict-plus-operands
 				const height = data.previousBlock.height + 1;
 				const previousBlockId = data.previousBlock.id;
-				const forgerInfo = previouslyForgedMap[delegateAddress];
+				const forgerInfo = previouslyForgedMap[delegateAddress.toString('hex')];
 				const maxHeightPreviouslyForged = forgerInfo?.height ?? 0;
 				const block = await this._create({
 					...data,
@@ -477,7 +477,8 @@ export class BlockProcessorV2 extends BaseBlockProcessor {
 		} = block;
 		const generatorAddress = getAddressFromPublicKey(generatorPublicKey);
 		// In order to compare with the minimum height in case of the first block, here it should be 0
-		const previouslyForged = previouslyForgedMap[generatorAddress];
+		const previouslyForged =
+			previouslyForgedMap[generatorAddress.toString('hex')];
 		const previouslyForgedHeightByDelegate = previouslyForged?.height ?? 0;
 		// previously forged height only saves maximum forged height
 		if (height <= previouslyForgedHeightByDelegate) {
@@ -485,7 +486,7 @@ export class BlockProcessorV2 extends BaseBlockProcessor {
 		}
 		const updatedPreviouslyForged = {
 			...previouslyForgedMap,
-			[generatorAddress]: {
+			[generatorAddress.toString('hex')]: {
 				height,
 				maxHeightPrevoted,
 				maxHeightPreviouslyForged,

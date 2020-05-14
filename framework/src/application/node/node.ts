@@ -296,7 +296,7 @@ export class Node {
 				this._chain.blockReward.calculateReward(action.params.height),
 			getForgerAddressesForRound: async (action: {
 				params: { round: number };
-			}): Promise<readonly string[]> =>
+			}): Promise<readonly Buffer[]> =>
 				this._dpos.getForgerAddressesForRound(action.params.round),
 			updateForgingStatus: async (action: {
 				params: { publicKey: string; password: string; forging: boolean };

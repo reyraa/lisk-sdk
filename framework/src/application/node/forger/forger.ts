@@ -13,12 +13,12 @@
  */
 
 import {
-	getPrivateAndPublicKeyBytesFromPassphrase,
 	decryptPassphraseWithPassword,
-	parseEncryptedPassphrase,
-	hashOnion,
 	generateHashOnionSeed,
 	getAddressFromPublicKey,
+	getPrivateAndPublicKeyBytesFromPassphrase,
+	hashOnion,
+	parseEncryptedPassphrase,
 } from '@liskhq/lisk-cryptography';
 import { Chain } from '@liskhq/lisk-chain';
 import { Dpos } from '@liskhq/lisk-dpos';
@@ -26,8 +26,8 @@ import { BFT } from '@liskhq/lisk-bft';
 import { BaseTransaction } from '@liskhq/lisk-transactions';
 import { TransactionPool } from '@liskhq/lisk-transaction-pool';
 import {
-	FORGER_INFO_KEY_USED_HASH_ONION,
 	FORGER_INFO_KEY_REGISTERED_HASH_ONION_SEEDS,
+	FORGER_INFO_KEY_USED_HASH_ONION,
 } from './constant';
 import { HighFeeForgingStrategy } from './strategies';
 import { Processor } from '../processor';
@@ -35,7 +35,7 @@ import { Logger, Storage, StringKeyVal } from '../../../types';
 
 interface UsedHashOnion {
 	readonly count: number;
-	readonly address: string;
+	readonly address: Buffer;
 	readonly height: number;
 }
 
@@ -206,12 +206,16 @@ export class Forger {
 		if (account?.isDelegate) {
 			if (forging) {
 				this._keypairs[
-					getAddressFromPublicKey(keypair.publicKey.toString('hex'))
+					getAddressFromPublicKey(keypair.publicKey.toString('hex')).toString(
+						'hex',
+					)
 				] = keypair;
 				this._logger.info(`Forging enabled on account: ${account.address}`);
 			} else {
 				delete this._keypairs[
-					getAddressFromPublicKey(keypair.publicKey.toString('hex'))
+					getAddressFromPublicKey(keypair.publicKey.toString('hex')).toString(
+						'hex',
+					)
 				];
 				this._logger.info(`Forging disabled on account: ${account.address}`);
 			}
@@ -289,7 +293,9 @@ export class Forger {
 			}
 			if (account.isDelegate) {
 				this._keypairs[
-					getAddressFromPublicKey(keypair.publicKey.toString('hex'))
+					getAddressFromPublicKey(keypair.publicKey.toString('hex')).toString(
+						'hex',
+					)
 				] = keypair;
 				this._logger.info(`Forging enabled on account: ${account.address}`);
 			} else {
@@ -302,7 +308,8 @@ export class Forger {
 			}
 			// Prepare hash-onion
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-			const registeredHashOnionSeed = registeredHashOnionSeeds[account.address];
+			const registeredHashOnionSeed =
+				registeredHashOnionSeeds[account.address.toString('hex')];
 			const hashOnionConfig = this._getHashOnionConfig(account.address);
 
 			// If hash onion in the config is different from what is registered, remove all the used information and register the new one
@@ -321,7 +328,9 @@ export class Forger {
 				);
 			}
 			// Update the registered hash onion (either same one, new one or overwritten one)
-			registeredHashOnionSeeds[account.address] = configHashOnionSeed;
+			registeredHashOnionSeeds[
+				account.address.toString()
+			] = configHashOnionSeed;
 			const highestUsedHashOnion = usedHashOnions.reduce<
 				UsedHashOnion | undefined
 			>((prev, current) => {
@@ -501,17 +510,15 @@ export class Forger {
 			forgersPublicKeys[keyPairs[key].publicKey.toString('hex')] = true;
 		});
 
-		const fullList = forgingDelegates?.map(forger => ({
+		return forgingDelegates?.map(forger => ({
 			forging: !!forgersPublicKeys[forger.publicKey],
 			publicKey: forger.publicKey,
 		}));
-
-		return fullList;
 	}
 
 	private _getNextHashOnion(
 		usedHashOnions: ReadonlyArray<UsedHashOnion>,
-		address: string,
+		address: Buffer,
 		height: number,
 	): {
 		readonly count: number;
@@ -566,7 +573,7 @@ export class Forger {
 		};
 	}
 
-	private _getHashOnionConfig(address: string): HashOnionConfig {
+	private _getHashOnionConfig(address: Buffer): HashOnionConfig {
 		const delegateConfig = this._config.forging.delegates?.find(
 			d => getAddressFromPublicKey(d.publicKey) === address,
 		);
@@ -615,15 +622,16 @@ export class Forger {
 	): UsedHashOnion[] {
 		const filteredObject = usedHashOnions.reduce(
 			({ others, highest }, current) => {
+				const currentAddress = current.address.toString('hex');
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-				const prevUsed = highest[current.address];
+				const prevUsed = highest[currentAddress];
 				if (prevUsed === undefined) {
 					// eslint-disable-next-line no-param-reassign
-					highest[current.address] = current;
+					highest[currentAddress] = current;
 				} else if (prevUsed.height < current.height) {
 					others.push(prevUsed);
 					// eslint-disable-next-line no-param-reassign
-					highest[current.address] = current;
+					highest[currentAddress] = current;
 				}
 				return {
 					highest,
@@ -661,11 +669,16 @@ export class Forger {
 		);
 
 		const currentSlotIndex = currentSlot % activeDelegates.length;
-		const currentSlotDelegate = activeDelegates[currentSlotIndex];
+		const currentSlotDelegateAddress = activeDelegates[
+			currentSlotIndex
+		].toString('hex');
 
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-		if (currentSlotDelegate && this._keypairs[currentSlotDelegate]) {
-			return this._keypairs[currentSlotDelegate];
+		if (
+			currentSlotDelegateAddress &&
+			this._keypairs[currentSlotDelegateAddress]
+		) {
+			return this._keypairs[currentSlotDelegateAddress];
 		}
 
 		return null;
