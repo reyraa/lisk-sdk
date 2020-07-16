@@ -87,7 +87,8 @@
 		"tslint": "5.20.1",
 		"tslint-immutable": "6.0.1",
 		"typescript": "3.7.2",
-		"uglify-es": "3.3.9",
+	  	"typedoc": "0.16.9",
+	  	"uglify-es": "3.3.9",
 		"wait-on": "3.2.0"
 	}
 }
