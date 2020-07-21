@@ -13,14 +13,85 @@
  *
  */
 /* tslint:disable:no-magic-numbers */
+/**
+ * ### Description
+ * Number to use when converting between the smallest possible denomination and 1 LSK.
+ *
+ * ### Example
+ * ```
+ * import * as transactions from '@liskhq/lisk-transactions';
+ *
+ * transactions.constants.FIXED_POINT;
+ * ```
+ * @category Constants
+ */
 export const FIXED_POINT = 10 ** 8;
-
+/**
+ * ### Description
+ * Fee required for a transfer (type 8) transaction.
+ *
+ * ### Example
+ * ```
+ * import * as transactions from '@liskhq/lisk-transactions';
+ *
+ * transactions.constants.TRANSFER_FEE;
+ * ```
+ * @category Constants
+ */
 export const TRANSFER_FEE = FIXED_POINT * 0.1;
 export const IN_TRANSFER_FEE = FIXED_POINT * 0.1;
 export const OUT_TRANSFER_FEE = FIXED_POINT * 0.1;
+/**
+ * ### Description
+ * Fee required for a register second passphrase (type 9) transaction.
+ *
+ * ### Example
+ * ```
+ * import * as transactions from '@liskhq/lisk-transactions';
+ *
+ * transactions.constants.SIGNATURE_FEE;
+ * ```
+ * @category Constants
+ */
 export const SIGNATURE_FEE = FIXED_POINT * 5;
+/**
+ * ### Description
+ * Fee required for a register delegate (type 10) transaction.
+ *
+ * ### Example
+ * ```
+ * import * as transactions from '@liskhq/lisk-transactions';
+ *
+ * transactions.constants.DELEGATE_FEE;
+ * ```
+ * @category Constants
+ */
 export const DELEGATE_FEE = FIXED_POINT * 25;
+/**
+ * ### Description
+ * Fee required for a cast votes (type 11) transaction.
+ *
+ * ### Example
+ * ```
+ * import * as transactions from '@liskhq/lisk-transactions';
+ *
+ * transactions.constants.VOTE_FEE;
+ * ```
+ * @category Constants
+ */
 export const VOTE_FEE = FIXED_POINT * 1;
+/**
+ * ### Description
+ * Fee required per group member (plus one) for a registered multisignature account (type 12) transaction.
+ *
+ * ### Example
+ * ```
+ * import * as transactions from '@liskhq/lisk-transactions';
+ *
+ * transactions.constants.MULTISIGNATURE_FEE;
+ * ```
+ * @category Constants
+ */
 export const MULTISIGNATURE_FEE = FIXED_POINT * 5;
 export const MULTISIGNATURE_MAX_LIFETIME = 72;
 export const MULTISIGNATURE_MIN_LIFETIME = 1;
@@ -39,17 +110,75 @@ export const BYTESIZES = {
 	SECOND_SIGNATURE_TRANSACTION: 64,
 	DATA: 64,
 };
-
+/**
+ * ### Description
+ * Date from which timestamps are calculated.
+ *
+ * ### Example
+ * ```
+ * import * as transactions from '@liskhq/lisk-transactions';
+ *
+ * transactions.constants.EPOCH_TIME;
+ * ```
+ * @category Constants
+ */
 export const EPOCH_TIME = new Date(Date.UTC(2016, 4, 24, 17, 0, 0, 0));
+/**
+ * ### Description
+ * Epoch time in milliseconds since Unix epoch.
+ *
+ * ### Example
+ * ```
+ * import * as transactions from '@liskhq/lisk-transactions';
+ *
+ * transactions.constants.EPOCH_TIME_MILLISECONDS;
+ * ```
+ * @category Constants
+ */
 export const EPOCH_TIME_MILLISECONDS = EPOCH_TIME.getTime();
 const MS_FACTOR = 1000;
+/**
+ * ### Description
+ * EPOCH_TIME in seconds since Unix epoch.
+ *
+ * ### Example
+ * ```
+ * import * as transactions from '@liskhq/lisk-transactions';
+ *
+ * transactions.constants.EPOCH_TIME_SECONDS;
+ * ```
+ * @category Constants
+ */
 export const EPOCH_TIME_SECONDS = Math.floor(EPOCH_TIME.getTime() / MS_FACTOR);
 
 // Largest possible number which can be stored in eight bytes.
 // Derived from bignum.fromBuffer(Buffer.from(new Array(8).fill(255))).
 const MAX_EIGHT_BYTE_NUMBER = '18446744073709551615';
-
+/**
+ * ### Description
+ * Maximum valid number which can form an address when suffixed with an 'L'.
+ *
+ * ### Example
+ * ```
+ * import * as transactions from '@liskhq/lisk-transactions';
+ *
+ * transactions.constants.MAX_ADDRESS_NUMBER;
+ * ```
+ * @category Constants
+ */
 export const MAX_ADDRESS_NUMBER = MAX_EIGHT_BYTE_NUMBER;
+/**
+ * ### Description
+ * Maximum valid number for transaction IDs.
+ *
+ * ### Example
+ * ```
+ * import * as transactions from '@liskhq/lisk-transactions';
+ *
+ * transactions.constants.MAX_TRANSACTION_ID;
+ * ```
+ * @category Constants
+ */
 export const MAX_TRANSACTION_ID = MAX_EIGHT_BYTE_NUMBER;
 // Largest possible amount. Maximum value for PostgreSQL bigint.
 export const MAX_TRANSACTION_AMOUNT = '9223372036854775807';

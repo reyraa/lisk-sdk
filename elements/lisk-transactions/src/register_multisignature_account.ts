@@ -79,7 +79,49 @@ const validateInputs = ({
 
 	validateNetworkIdentifier(networkIdentifier);
 };
-
+/**
+ *
+ * ### Description
+ * This creates a register multisignature account (type 12) transaction.
+ *
+ * ### Example
+ * ```
+ * import * as transactions from '@liskhq/lisk-transactions';
+ *
+ * transactions.registerMultisignature({
+ *    keysgroup: [
+ *        '9d3058175acab969f41ad9b86f7a2926c74258670fe56b37c429c01fca9f2f0f',
+ *        '141b16ac8d5bd150f16b1caa08f689057ca4c4434445e56661831f4e671b7c0a',
+ *        '3ff32442bb6da7d60c1b7752b24e6467813c9b698e0f278d48c43580da972135',
+ *    ],
+ *    lifetime: 34,
+ *    minimum: 2,
+ *    networkIdentifier: '7158c297294a540bc9ac6e474529c3da38d03ece056e3fa2d98141e6ec54132d'
+ * });
+ * ```
+ *
+ * ### Result
+ * ```
+ * {
+ *  senderPublicKey: undefined,
+ *  timestamp: 117413270,
+ *  type: 12,
+ *  fee: '2000000000',
+ *  asset: {
+ *    min: 2,
+ *    lifetime: 34,
+ *    keysgroup: [
+ *      '+9d3058175acab969f41ad9b86f7a2926c74258670fe56b37c429c01fca9f2f0f',
+ *      '+141b16ac8d5bd150f16b1caa08f689057ca4c4434445e56661831f4e671b7c0a',
+ *      '+3ff32442bb6da7d60c1b7752b24e6467813c9b698e0f278d48c43580da972135'
+ *    ]
+ *  },
+ *  networkIdentifier: '7158c297294a540bc9ac6e474529c3da38d03ece056e3fa2d98141e6ec54132d'
+ * }
+ * ```
+ *
+ * @category Transactions
+ */
 export const registerMultisignature = (
 	inputs: RegisterMultisignatureInputs,
 ): Partial<TransactionJSON> => {

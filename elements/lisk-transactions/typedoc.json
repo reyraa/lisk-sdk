@@ -2,19 +2,37 @@
   "inputFiles": [
 	"./src/index.ts"
   ],
-  "mode": "file",
   "exclude": [
 	"**/__test__/**/*",
 	"**/__node_modules__/**/*"
   ],
+  "mode": "file",
+  "categorizeByGroup": true,
+  "defaultCategory": "utils",
   "includeDeclarations": true,
   "externalPattern": "**/node_modules/**",
   "excludeExternals": true,
   "excludeNotExported": true,
+  "name": "lisk-transactions",
+  "includeVersion": true,
+  "stripInternal": true,
+  "toc": [
+	"BaseTransaction",
+	"DelegateTransaction",
+	"registerDelegate",
+	"MultisignatureTransaction",
+	"registerMultisignature",
+	"SecondSignatureTransaction",
+	"registerSecondPassphrase",
+	"TransferTransaction",
+	"transfer",
+	"VoteTransaction",
+	"castVotes"
+  ],
   "tsconfig": "./tsconfig.json",
   "out": "../../../typedocs/transactions",
   "ignoreCompilerErrors": true,
   "plugin": "none",
-  "readme": "none",
+  "readme": "docs/index.md",
   "theme": "../../../lisk-docs-typedoc-theme"
 }

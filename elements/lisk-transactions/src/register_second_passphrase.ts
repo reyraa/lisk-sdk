@@ -39,7 +39,46 @@ const validateInputs = ({
 
 	validateNetworkIdentifier(networkIdentifier);
 };
-
+/**
+ *
+ * ### Description
+ * This creates a register second passphrase, (type 9) transaction.
+ *
+ * ### Example
+ * ```
+ * import * as transactions from '@liskhq/lisk-transactions';
+ *
+ * transactions.registerSecondPassphrase({
+ *    networkIdentifier: '7158c297294a540bc9ac6e474529c3da38d03ece056e3fa2d98141e6ec54132d',
+ *    passphrase:'one two three',
+ *    secondPassphrase:'four five six'
+ * });
+ * ```
+ *
+ * ### Result
+ * ```
+ * {
+ *    id: '13923958554840193683',
+ *    blockId: undefined,
+ *    height: undefined,
+ *    confirmations: undefined,
+ *    type: 9,
+ *    timestamp: 117411517,
+ *    senderPublicKey: 'ff61f0c5e5e48d8b043962b8f3a80fda41679f3fa0a1c79f8a294876fab242ed',
+ *    senderId: '2367716785579772625L',
+ *    fee: '500000000',
+ *    signature: '774de652a6af47a8c0b5655f3b91677ebf67309e200462756fb6c55bc125f63903493798a4c962372b589a6fbbbadc28df86f6cbd25486eb271b78320fe76a0d',
+ *    signSignature: undefined,
+ *    signatures: [],
+ *    asset: {
+ *      publicKey: '92b5fc01eb39ed4edddac518aa6d58b15a48ae767f7ab2cfb6605966edacadf5'
+ *    },
+ *    receivedAt: undefined
+ *  }
+ * ```
+ *
+ * @category Transactions
+ */
 export const registerSecondPassphrase = (
 	inputs: SecondPassphraseInputs,
 ): Partial<TransactionJSON> => {

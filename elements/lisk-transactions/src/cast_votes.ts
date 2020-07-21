@@ -61,7 +61,54 @@ const validateInputs = ({
 
 	validateNetworkIdentifier(networkIdentifier);
 };
-
+/**
+ *
+ * ### Description
+ * This creates a cast votes (type 11) transaction.
+ *
+ * ### Example
+ * ```
+ * import * as transactions from '@liskhq/lisk-transactions';
+ *
+ * transactions.castVotes({
+ *    networkIdentifier: '7158c297294a540bc9ac6e474529c3da38d03ece056e3fa2d98141e6ec54132d',
+ *    passphrase:'one two three',
+ *    votes: ['9d3058175acab969f41ad9b86f7a2926c74258670fe56b37c429c01fca9f2f0f'],
+ *    unvotes: [
+ *        '141b16ac8d5bd150f16b1caa08f689057ca4c4434445e56661831f4e671b7c0a',
+ *        '3ff32442bb6da7d60c1b7752b24e6467813c9b698e0f278d48c43580da972135',
+ *        ]
+ * });
+ * ```
+ *
+ * ### Result
+ * ```
+ * {
+ *  id: '12115346598732700133',
+ *  blockId: undefined,
+ *  height: undefined,
+ *  confirmations: undefined,
+ *  type: 11,
+ *  timestamp: 117412612,
+ *  senderPublicKey: 'ff61f0c5e5e48d8b043962b8f3a80fda41679f3fa0a1c79f8a294876fab242ed',
+ *  senderId: '2367716785579772625L',
+ *  fee: '100000000',
+ *  signature: 'da54f85ee512ac67ff9cd278cd751a9243f5977530315d5e3fddc954fefd6f3351ad8f86e035ee86d99d14db228fdea98664d6ef724baef662f8f866ed7fda09',
+ *  signSignature: undefined,
+ *  signatures: [],
+ *  asset: {
+ *    votes: [
+ *      '+9d3058175acab969f41ad9b86f7a2926c74258670fe56b37c429c01fca9f2f0f',
+ *      '-141b16ac8d5bd150f16b1caa08f689057ca4c4434445e56661831f4e671b7c0a',
+ *      '-3ff32442bb6da7d60c1b7752b24e6467813c9b698e0f278d48c43580da972135'
+ *    ]
+ *  },
+ *  receivedAt: undefined
+ * }
+ * ```
+ *
+ * @category Transactions
+ */
 export const castVotes = (inputs: CastVoteInputs): Partial<TransactionJSON> => {
 	validateInputs(inputs);
 	const {

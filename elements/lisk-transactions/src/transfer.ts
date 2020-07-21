@@ -82,7 +82,38 @@ const validateInputs = ({
 
 	validateNetworkIdentifier(networkIdentifier);
 };
-
+/**
+ *
+ * ### Description
+ * This creates a transfer (type 8) transaction.
+ *
+ * ### Example
+ * ```
+ * import * as transactions from '@liskhq/lisk-transactions';
+ *
+ * transactions.transfer({
+ *   networkIdentifier: '7158c297294a540bc9ac6e474529c3da38d03ece056e3fa2d98141e6ec54132d',
+ *   amount: '1230000',
+ *   recipientId: '12668885769632475474L'
+ 8 });
+ * ```
+ *
+ * ### Result
+ * ```
+ * {
+ *   senderPublicKey: undefined,
+ *   timestamp: 117410306,
+ *   type: 8,
+ *   asset: {
+ *     amount: '1230000',
+ *     recipientId: '12668885769632475474L',
+ *     data: undefined
+ *   }
+ * }
+ * ```
+ *
+ * @category Transactions
+ */
 export const transfer = (inputs: TransferInputs): Partial<TransactionJSON> => {
 	validateInputs(inputs);
 	const {
