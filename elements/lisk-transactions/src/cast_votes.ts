@@ -67,7 +67,7 @@ const validateInputs = ({
  * This creates a cast votes (type 11) transaction.
  *
  * ### Example
- * ```
+ * ```javascript
  * import * as transactions from '@liskhq/lisk-transactions';
  *
  * transactions.castVotes({
@@ -82,7 +82,7 @@ const validateInputs = ({
  * ```
  *
  * ### Result
- * ```
+ * ```javascript
  * {
  *  id: '12115346598732700133',
  *  blockId: undefined,

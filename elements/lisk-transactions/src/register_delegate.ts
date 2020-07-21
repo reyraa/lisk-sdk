@@ -44,12 +44,11 @@ const validateInputs = ({
 	validateNetworkIdentifier(networkIdentifier);
 };
 /**
- *
  * ### Description
  * This creates a register delegate (type 10) transaction.
  *
  * ### Example
- * ```
+ * ```javascript
  * import * as transactions from '@liskhq/lisk-transactions';
  *
  * transactions.registerDelegate({
@@ -60,7 +59,7 @@ const validateInputs = ({
  * ```
  *
  * ### Result
- * ```
+ * ```json
  * {
  *  id: '16884232508060487400',
  *  blockId: undefined,
