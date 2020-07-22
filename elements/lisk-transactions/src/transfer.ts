@@ -24,15 +24,28 @@ import { TransferTransaction } from './8_transfer_transaction';
 import { BYTESIZES } from './constants';
 import { TransactionJSON } from './transaction_types';
 import { createBaseTransaction } from './utils';
-
+/**
+ * ### Description
+ * A list of all available input parameters to create a [[TransferTransaction |transfer transaction]], using the [[transfer |transfer()]] function.
+ *
+ * @category Transactions
+ */
 export interface TransferInputs {
+	/** The amount to transfer, (as a string in Beddows, the lowest denomination possible). */
 	readonly amount: string;
+	/** The ID of the network where the transaction will be broadcasted to. */
 	readonly networkIdentifier: string;
+	/** Optional data to include in the transaction asset. (Must be a UTF8-encoded string of maximum 64 characters.) */
 	readonly data?: string;
+	/** Optional passphrase to use to sign the transaction. If not provided at creation the transaction can be signed later. */
 	readonly passphrase?: string;
+	/** The address of the recipient. */
 	readonly recipientId?: string;
+	/** The address of the recipient. Only needed, if no recipientId is provided and vice versa. */
 	readonly recipientPublicKey?: string;
+	/** Optional second passphrase to use to sign the transaction if the account has registered a second passphrase. If not provided at the creation, the transaction can be signed with the second passphrase later. */
 	readonly secondPassphrase?: string;
+	/** todo */
 	readonly timeOffset?: number;
 }
 
@@ -89,11 +102,11 @@ const validateInputs = ({
  *
  * ### Example
  * ```javascript
-transactions.transfer({
-    networkIdentifier: '7158c297294a540bc9ac6e474529c3da38d03ece056e3fa2d98141e6ec54132d',
-    amount: '1230000',
-    recipientId: '12668885769632475474L'
-});
+ * transactions.transfer({
+ *    networkIdentifier: '7158c297294a540bc9ac6e474529c3da38d03ece056e3fa2d98141e6ec54132d',
+ *    amount: '1230000',
+ *    recipientId: '12668885769632475474L'
+ * });
  * ```
  *
  * ### Result
@@ -109,7 +122,8 @@ transactions.transfer({
  *   }
  * }
  * ```
- * @param inputs The input params are defined in the [[TransferInputs |TransferInputs interface]].
+ * @param inputs All available input params are described in the [[TransferInputs |TransferInputs interface]].
+ * @returns A transfer transaction object.
  * @category Transactions
  */
 export const transfer = (inputs: TransferInputs): Partial<TransactionJSON> => {

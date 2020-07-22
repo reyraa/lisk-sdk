@@ -13,7 +13,19 @@
  *
  */
 import * as cryptography from '@liskhq/lisk-cryptography';
-
+/**
+ * ### Description
+ * Returns a transaction ID for a transaction.
+ *
+ * ### Example
+ * todo
+ *
+ * ### Result
+ * todo
+ *
+ * @param transactionBytes The buffer representation of the transaction whose ID is required.
+ * @returns The transaction ID.
+ */
 export const getId = (transactionBytes: Buffer): string => {
 	const transactionHash = cryptography.hash(transactionBytes);
 	const bufferFromFirstEntriesReversed = cryptography.getFirstEightBytesReversed(

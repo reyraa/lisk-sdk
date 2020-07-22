@@ -18,12 +18,22 @@ import { DelegateTransaction } from './10_delegate_transaction';
 import { DELEGATE_FEE, USERNAME_MAX_LENGTH } from './constants';
 import { TransactionJSON } from './transaction_types';
 import { createBaseTransaction } from './utils';
-
+/**
+ * ### Description
+ * A list of all available input parameters to create a [[DelegateTransaction |delegate transaction]], using the [[registerDelegate |registerDelegate()]] function.
+ *
+ * @category Transactions
+ */
 export interface RegisterDelegateInputs {
+	/** todo */
 	readonly passphrase?: string;
+	/** todo */
 	readonly secondPassphrase?: string;
+	/** todo */
 	readonly timeOffset?: number;
+	/** todo */
 	readonly username: string;
+	/** todo */
 	readonly networkIdentifier: string;
 }
 
@@ -59,7 +69,7 @@ const validateInputs = ({
  * ```
  *
  * ### Result
- * ```json
+ * ```javascript
  * {
  *  id: '16884232508060487400',
  *  blockId: undefined,
@@ -78,6 +88,8 @@ const validateInputs = ({
  * }
  * ```
  *
+ * @param inputs All available input params are described in the [[RegisterDelegateInputs |RegisterDelegateInputs interface]].
+ * @returns A register delegate transaction object.
  * @category Transactions
  */
 export const registerDelegate = (

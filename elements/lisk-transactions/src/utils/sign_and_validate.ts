@@ -19,7 +19,24 @@ import {
 	IsValidResponse,
 	IsValidResponseWithError,
 } from '../transaction_types';
-
+/**
+ * ### Description
+ * Validates a signature.
+ *
+ * ### Example
+ * ```javascript
+ * //todo
+ * ```
+ * ### Result
+ * ```javascript
+ * //todo
+ * ```
+ * @param publicKey The public key to validate.
+ * @param signature The signature to validate.
+ * @param transactionBytes The buffer representation of the transaction.
+ * @param id transaction ID.
+ * @returns `true` if the signature is valid for the provided transaction and public key, otherwise an error will be thrown.
+ */
 export const validateSignature = (
 	publicKey: string,
 	signature: string,
@@ -41,7 +58,19 @@ export const validateSignature = (
 			: undefined,
 	};
 };
-
+/**
+ * ### Description
+ * todo
+ *
+ * ### Example
+ * todo
+ *
+ * ### Result
+ * todo
+ *
+ * @param signatures
+ * @returns todo
+ */
 export const signaturesAreUnique = (
 	signatures: ReadonlyArray<string>,
 ): boolean => {
@@ -52,7 +81,22 @@ export const signaturesAreUnique = (
 
 	return true;
 };
-
+/**
+ * ### Description
+ * todo
+ *
+ * ### Example
+ * todo
+ *
+ * ### Result
+ * todo
+ *
+ * @param publicKeys
+ * @param signatures
+ * @param transactionBytes
+ * @param id
+ * @returns todo
+ */
 export const checkPublicKeySignatureUniqueness = (
 	publicKeys: ReadonlyArray<string>,
 	signatures: ReadonlyArray<string>,
@@ -85,7 +129,23 @@ export const checkPublicKeySignatureUniqueness = (
 
 	return validSignatures;
 };
-
+/**
+ * ### Description
+ * Validates multisignatures.
+ *
+ * ### Example
+ * todo
+ *
+ * ### Result
+ * todo
+ *
+ * @param publicKeys A list of the public keys to validate.
+ * @param signatures A list of the signatures to validate.
+ * @param minimumValidations The public key to validate as number.
+ * @param transactionBytes The buffer representation of the transaction.
+ * @param id Optional transaction ID.
+ * @returns `true` if the signature is valid for the provided transaction and public key, otherwise an error will be thrown.
+ */
 export const validateMultisignatures = (
 	publicKeys: ReadonlyArray<string>,
 	signatures: ReadonlyArray<string>,

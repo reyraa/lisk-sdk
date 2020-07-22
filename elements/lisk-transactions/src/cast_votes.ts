@@ -25,13 +25,24 @@ import {
 	prependMinusToPublicKeys,
 	prependPlusToPublicKeys,
 } from './utils';
-
+/**
+ * ### Description
+ * A list of all available input parameters to create a [VoteTransaction |vote transaction]], using the [[castVotes |castVotes()]] function.
+ *
+ * @category Transactions
+ */
 export interface CastVoteInputs {
+	/** The ID of the network where the transaction will be broadcasted to. */
 	readonly networkIdentifier: string;
+	/** Optional passphrase used to sign the transaction. If not provided at the creation, the transaction can be signed later. */
 	readonly passphrase?: string;
+	/** Optional second passphrase used to sign the transaction if the account has registered a second passphrase. If not provided at the creation, the transaction can be signed with the second passphrase later. */
 	readonly secondPassphrase?: string;
+	/** todo */
 	readonly timeOffset?: number;
+	/** The public keys of the delegates from whom you want to remove your vote. */
 	readonly unvotes?: ReadonlyArray<string>;
+	/** The public keys of the delegates to vote for. */
 	readonly votes?: ReadonlyArray<string>;
 }
 
@@ -77,7 +88,7 @@ const validateInputs = ({
  *    unvotes: [
  *        '141b16ac8d5bd150f16b1caa08f689057ca4c4434445e56661831f4e671b7c0a',
  *        '3ff32442bb6da7d60c1b7752b24e6467813c9b698e0f278d48c43580da972135',
- *        ]
+ *    ]
  * });
  * ```
  *
@@ -107,6 +118,8 @@ const validateInputs = ({
  * }
  * ```
  *
+ * @param inputs All available input params are described in the [[CastVoteInputs |CastVoteInputs interface]].
+ * @returns A cast votes transaction object.
  * @category Transactions
  */
 export const castVotes = (inputs: CastVoteInputs): Partial<TransactionJSON> => {

@@ -28,14 +28,26 @@ import {
 } from './constants';
 import { TransactionJSON } from './transaction_types';
 import { createBaseTransaction, prependPlusToPublicKeys } from './utils';
-
+/**
+ * ### Description
+ * A list of all available input parameters to create a [[MultisignatureTransaction |multisignature transaction]], using the [[registerMultisignature | registerMultisignature()]] function.
+ *
+ * @category Transactions
+ */
 export interface RegisterMultisignatureInputs {
+	/** todo */
 	readonly keysgroup: ReadonlyArray<string>;
+	/** todo */
 	readonly lifetime: number;
+	/** todo */
 	readonly minimum: number;
+	/** todo */
 	readonly passphrase?: string;
+	/** todo */
 	readonly secondPassphrase?: string;
+	/** todo */
 	readonly timeOffset?: number;
+	/** todo */
 	readonly networkIdentifier: string;
 }
 
@@ -85,7 +97,7 @@ const validateInputs = ({
  * This creates a register multisignature account (type 12) transaction.
  *
  * ### Example
- * ```
+ * ```javascript
  * import * as transactions from '@liskhq/lisk-transactions';
  *
  * transactions.registerMultisignature({
@@ -101,7 +113,7 @@ const validateInputs = ({
  * ```
  *
  * ### Result
- * ```
+ * ```javascript
  * {
  *  senderPublicKey: undefined,
  *  timestamp: 117413270,
@@ -119,7 +131,8 @@ const validateInputs = ({
  *  networkIdentifier: '7158c297294a540bc9ac6e474529c3da38d03ece056e3fa2d98141e6ec54132d'
  * }
  * ```
- *
+ * @param inputs All available input params are described in the [[RegisterMultisignatureInputs |RegisterMultisignatureInputs interface]].
+ * @returns A register multisignature transaction object.
  * @category Transactions
  */
 export const registerMultisignature = (

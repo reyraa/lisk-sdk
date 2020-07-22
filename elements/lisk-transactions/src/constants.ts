@@ -23,7 +23,6 @@
  *
  * transactions.constants.FIXED_POINT;
  * ```
- * @category Constants
  */
 export const FIXED_POINT = 10 ** 8;
 /**
@@ -36,7 +35,6 @@ export const FIXED_POINT = 10 ** 8;
  *
  * transactions.constants.TRANSFER_FEE;
  * ```
- * @category Constants
  */
 export const TRANSFER_FEE = FIXED_POINT * 0.1;
 export const IN_TRANSFER_FEE = FIXED_POINT * 0.1;
@@ -51,7 +49,6 @@ export const OUT_TRANSFER_FEE = FIXED_POINT * 0.1;
  *
  * transactions.constants.SIGNATURE_FEE;
  * ```
- * @category Constants
  */
 export const SIGNATURE_FEE = FIXED_POINT * 5;
 /**
@@ -64,7 +61,6 @@ export const SIGNATURE_FEE = FIXED_POINT * 5;
  *
  * transactions.constants.DELEGATE_FEE;
  * ```
- * @category Constants
  */
 export const DELEGATE_FEE = FIXED_POINT * 25;
 /**
@@ -77,7 +73,6 @@ export const DELEGATE_FEE = FIXED_POINT * 25;
  *
  * transactions.constants.VOTE_FEE;
  * ```
- * @category Constants
  */
 export const VOTE_FEE = FIXED_POINT * 1;
 /**
@@ -90,7 +85,6 @@ export const VOTE_FEE = FIXED_POINT * 1;
  *
  * transactions.constants.MULTISIGNATURE_FEE;
  * ```
- * @category Constants
  */
 export const MULTISIGNATURE_FEE = FIXED_POINT * 5;
 export const MULTISIGNATURE_MAX_LIFETIME = 72;
@@ -120,7 +114,6 @@ export const BYTESIZES = {
  *
  * transactions.constants.EPOCH_TIME;
  * ```
- * @category Constants
  */
 export const EPOCH_TIME = new Date(Date.UTC(2016, 4, 24, 17, 0, 0, 0));
 /**
@@ -133,13 +126,12 @@ export const EPOCH_TIME = new Date(Date.UTC(2016, 4, 24, 17, 0, 0, 0));
  *
  * transactions.constants.EPOCH_TIME_MILLISECONDS;
  * ```
- * @category Constants
  */
 export const EPOCH_TIME_MILLISECONDS = EPOCH_TIME.getTime();
 const MS_FACTOR = 1000;
 /**
  * ### Description
- * EPOCH_TIME in seconds since Unix epoch.
+ * Epoch time in seconds since Unix epoch.
  *
  * ### Example
  * ```
@@ -147,7 +139,6 @@ const MS_FACTOR = 1000;
  *
  * transactions.constants.EPOCH_TIME_SECONDS;
  * ```
- * @category Constants
  */
 export const EPOCH_TIME_SECONDS = Math.floor(EPOCH_TIME.getTime() / MS_FACTOR);
 
@@ -164,7 +155,6 @@ const MAX_EIGHT_BYTE_NUMBER = '18446744073709551615';
  *
  * transactions.constants.MAX_ADDRESS_NUMBER;
  * ```
- * @category Constants
  */
 export const MAX_ADDRESS_NUMBER = MAX_EIGHT_BYTE_NUMBER;
 /**
@@ -177,7 +167,6 @@ export const MAX_ADDRESS_NUMBER = MAX_EIGHT_BYTE_NUMBER;
  *
  * transactions.constants.MAX_TRANSACTION_ID;
  * ```
- * @category Constants
  */
 export const MAX_TRANSACTION_ID = MAX_EIGHT_BYTE_NUMBER;
 // Largest possible amount. Maximum value for PostgreSQL bigint.
