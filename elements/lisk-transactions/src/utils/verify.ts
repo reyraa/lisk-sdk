@@ -24,19 +24,18 @@ import {
 	validateSignature,
 } from './sign_and_validate';
 /**
- * ### Description
+ * #### Description
  * Verifies a public key from a sender of a transaction.
  *
- * ### Example
- * todo
- *
- * ### Result
+ * #### Example
  * todo
  *
  * @param id The id of the transaction.
  * @param sender The sender account of the transaction.
  * @param publicKey The public key to verify.
  * @returns `undefined` if the public key is verified. A [[TransactionError]] is thrown, if the verification fails.
+ * ##### Result
+ * todo
  */
 export const verifySenderPublicKey = (
 	id: string,
@@ -53,19 +52,18 @@ export const verifySenderPublicKey = (
 		  )
 		: undefined;
 /**
- * ### Description
+ * #### Description
  * Verifies if an account has enough balance to send a transaction.
  *
- * ### Example
- * todo
- *
- * ### Result
+ * #### Example
  * todo
  *
  * @param id The ID of the transaction.
  * @param account The sender account of the transaction.
  * @param amount The amount of the transaction.
  * @returns If the accounts has enough balance to send the transaction. A [[TransactionError]] is thrown, if the verification fails.
+ * ##### Result
+ * todo
  */
 export const verifyBalance = (
 	id: string,
@@ -82,13 +80,10 @@ export const verifyBalance = (
 		  )
 		: undefined;
 /**
- * ### Description
+ * #### Description
  * Verifies if an account has enough balance to pay the amount and the fee of a transaction.
  *
- * ### Example
- * todo
- *
- * ### Result
+ * #### Example
  * todo
  *
  * @param id The ID of the transaction.
@@ -96,6 +91,8 @@ export const verifyBalance = (
  * @param amount The amount of the transaction.
  * @param fee The fee of the transaction.
  * @returns `undefined` if the accounts has enough balance to pay the amount and fee of the transaction. A [[TransactionError]] is thrown, if the verification fails.
+ * ##### Result
+ * todo
  */
 export const verifyAmountBalance = (
 	id: string,
@@ -117,13 +114,10 @@ export const verifyAmountBalance = (
 	return undefined;
 };
 /**
- * ### Description
+ * #### Description
  * Verifies the second signature of an account for a transaction.
  *
- * ### Example
- * todo
- *
- * ### Result
+ * #### Example
  * todo
  *
  * @param id The ID of the transaction.
@@ -131,6 +125,8 @@ export const verifyAmountBalance = (
  * @param signSignature The signature to verify.
  * @param transactionBytes The buffer representation of the transaction.
  * @returns `undefined`, if the second signature is valid. Otherwise a [[TransactionError]] is thrown.
+ * ##### Result
+ * todo
  */
 export const verifySecondSignature = (
 	id: string,
@@ -164,7 +160,7 @@ export const verifySecondSignature = (
 	return error;
 };
 /**
- * ### Description
+ * #### Description
  * todo
  *
  */
@@ -182,13 +178,10 @@ const isMultisignatureAccount = (account: Account): boolean =>
 		account.multiMin
 	);
 /**
- * ### Description
+ * #### Description
  * Verifies signatures of a multisignature account for a transaction.
  *
- * ### Example
- * todo
- *
- * ### Result
+ * #### Example
  * todo
  *
  * @param id The ID of the transaction.
@@ -196,6 +189,8 @@ const isMultisignatureAccount = (account: Account): boolean =>
  * @param signatures The signatures to verify.
  * @param transactionBytes The buffer representation of the transaction.
  * @returns The return value is described in the [[VerifyMultiSignatureResult |VerifyMultiSignatureResult interface]].
+ * ##### Result
+ * todo
  */
 export const verifyMultiSignatures = (
 	id: string,

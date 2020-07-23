@@ -22,19 +22,19 @@ const LISK_MAX_DECIMAL_POINTS = 8;
 const getDecimalPlaces = (amount: string): number =>
 	(amount.split('.')[1] || '').length;
 /**
- * ### Description
+ * #### Description
  * This converts amounts in Beddows, (the smallest denomination) to the amounts in one LSK.
  *
- * ### Example
- * ```javascript
- * //todo
- * ```
- * ### Result
+ * #### Example
  * ```javascript
  * //todo
  * ```
  * @param beddowsAmount Amount in Beddows to be converted.
  * @returns Amount in LSK.
+ * ##### Result
+ * ```javascript
+ * //todo
+ * ```
  */
 export const convertBeddowsToLSK = (beddowsAmount?: string): string => {
 	if (typeof beddowsAmount !== 'string') {
@@ -52,19 +52,19 @@ export const convertBeddowsToLSK = (beddowsAmount?: string): string => {
 	return lskAmountBigNum.toString(BASE_10);
 };
 /**
- * ### Description
+ * #### Description
  * This converts the amounts in LSK to the amounts in Beddows, (the smallest denomination).
  *
- * ### Example
- * ```javascript
- * //todo
- * ```
- * ### Result
+ * #### Example
  * ```javascript
  * //todo
  * ```
  * @param lskAmount Amount to be converted.
  * @returns Amount in Beddows.
+ * ##### Result
+ * ```javascript
+ * //todo
+ * ```
  */
 export const convertLSKToBeddows = (lskAmount?: string): string => {
 	if (typeof lskAmount !== 'string') {

@@ -16,14 +16,10 @@ import { getAddressFromPublicKey } from '@liskhq/lisk-cryptography';
 
 import { TransactionError } from '../errors';
 /**
- * ### Description
+ * #### Description
  * Validates if the senderId matches the public key of a transaction.
  *
- * ### Example
- * ```javascript
- * //todo
- * ```
- * ### Result
+ * #### Example
  * ```javascript
  * //todo
  * ```
@@ -31,7 +27,11 @@ import { TransactionError } from '../errors';
  * @param id The transaction id.
  * @param senderId The address to validate as string.
  * @param senderPublicKey The public key to validate as string.
- * @returns `true` if the public key matches the senderId, otherwise an error will be thrown.
+ * @returns `undefined` if the public key matches the senderId. A [[TransactionError]] is thrown, if the verification fails.
+ * ##### Result
+ * ```javascript
+ * //todo
+ * ```
  */
 export const validateSenderIdAndPublicKey = (
 	id: string,

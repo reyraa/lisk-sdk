@@ -17,17 +17,16 @@ import { EPOCH_TIME_MILLISECONDS } from '../constants';
 
 const MS_TIME = 1000;
 /**
- * ### Description
+ * #### Description
  * Calculates the number of seconds that elapsed since the network epoch time. Chooses the current time, if no time is provided.
  *
- * ### Example
- * todo
- *
- * ### Result
+ * #### Example
  * todo
  *
  * @param givenTimestamp Timestamp in seconds.
  * @returns The time that has been elapsed between the network epoch time and the provided timestamp.
+ * ##### Result
+ * todo
  */
 export const getTimeFromBlockchainEpoch = (givenTimestamp?: number): number => {
 	const startingPoint = givenTimestamp || new Date().getTime();
@@ -36,17 +35,16 @@ export const getTimeFromBlockchainEpoch = (givenTimestamp?: number): number => {
 	return Math.floor((startingPoint - blockchainInitialTime) / MS_TIME);
 };
 /**
- * ### Description
+ * #### Description
  * todo
  *
- * ### Example
- * todo
- *
- * ### Result
+ * #### Example
  * todo
  *
  * @param offset
  * @returns todo
+ * ##### Result
+ * todo
  */
 export const getTimeWithOffset = (offset?: number): number => {
 	const now = new Date().getTime();
