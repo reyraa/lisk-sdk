@@ -26,7 +26,7 @@ import {
 	prependPlusToPublicKeys,
 } from './utils';
 /**
- * ### Description
+ * #### Description
  * A list of all available input parameters to create a [VoteTransaction |vote transaction]], using the [[castVotes |castVotes()]] function.
  *
  */
@@ -72,11 +72,12 @@ const validateInputs = ({
 	validateNetworkIdentifier(networkIdentifier);
 };
 /**
+ * #### Description
+ * This creates a cast votes (type 11) and returns it as a [[TransactionJSON]].
  *
- * ### Description
- * This creates a cast votes (type 11) transaction.
+ * As an alternative to this function, it is possible to create a vote transaction by initializing the [[VoteTransaction]] class.
  *
- * ### Example
+ * #### Example
  * ```javascript
  * import * as transactions from '@liskhq/lisk-transactions';
  *
@@ -91,7 +92,10 @@ const validateInputs = ({
  * });
  * ```
  *
- * ### Result
+ * @param inputs All available input params are described in the [[CastVoteInputs |CastVoteInputs interface]].
+ * @returns A cast votes transaction object.
+ *
+ * ##### Example Result
  * ```javascript
  * {
  *  id: '12115346598732700133',
@@ -116,9 +120,6 @@ const validateInputs = ({
  *  receivedAt: undefined
  * }
  * ```
- *
- * @param inputs All available input params are described in the [[CastVoteInputs |CastVoteInputs interface]].
- * @returns A cast votes transaction object.
  * @category Transactions
  */
 export const castVotes = (inputs: CastVoteInputs): Partial<TransactionJSON> => {

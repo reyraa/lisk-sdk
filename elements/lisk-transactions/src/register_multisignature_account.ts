@@ -29,7 +29,7 @@ import {
 import { TransactionJSON } from './transaction_types';
 import { createBaseTransaction, prependPlusToPublicKeys } from './utils';
 /**
- * ### Description
+ * #### Description
  * A list of all available input parameters to create a [[MultisignatureTransaction |multisignature transaction]], using the [[registerMultisignature | registerMultisignature()]] function.
  *
  */
@@ -91,11 +91,12 @@ const validateInputs = ({
 	validateNetworkIdentifier(networkIdentifier);
 };
 /**
+ * #### Description
+ * This creates a register multisignature account (type 12) transaction and returns it as a [[TransactionJSON]].
  *
- * ### Description
- * This creates a register multisignature account (type 12) transaction.
+ * As an alternative to this function, it is possible to create a multisignature transaction by initializing the [[MultisignatureTransaction]] class.
  *
- * ### Example
+ * #### Example
  * ```javascript
  * import * as transactions from '@liskhq/lisk-transactions';
  *
@@ -111,7 +112,9 @@ const validateInputs = ({
  * });
  * ```
  *
- * ### Result
+ * @param inputs All available input params are described in the [[RegisterMultisignatureInputs |RegisterMultisignatureInputs interface]].
+ * @returns A register multisignature transaction object.
+ * ##### Example Result
  * ```javascript
  * {
  *  senderPublicKey: undefined,
@@ -130,8 +133,6 @@ const validateInputs = ({
  *  networkIdentifier: '7158c297294a540bc9ac6e474529c3da38d03ece056e3fa2d98141e6ec54132d'
  * }
  * ```
- * @param inputs All available input params are described in the [[RegisterMultisignatureInputs |RegisterMultisignatureInputs interface]].
- * @returns A register multisignature transaction object.
  * @category Transactions
  */
 export const registerMultisignature = (

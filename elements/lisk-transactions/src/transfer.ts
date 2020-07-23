@@ -25,7 +25,7 @@ import { BYTESIZES } from './constants';
 import { TransactionJSON } from './transaction_types';
 import { createBaseTransaction } from './utils';
 /**
- * ### Description
+ * #### Description
  * A list of all available input parameters to create a [[TransferTransaction |transfer transaction]], using the [[transfer |transfer()]] function.
  *
  */
@@ -96,10 +96,12 @@ const validateInputs = ({
 };
 /**
  *
- * ### Description
- * This creates a transfer (type 8) transaction.
+ * #### Description
+ * This creates a transfer (type 8) transaction and returns it as a [[TransactionJSON]].
  *
- * ### Example
+ * As an alternative to this function, it is possible to create a transfer transaction by initializing the [[TransferTransaction]] class.
+ *
+ * #### Example
  * ```javascript
  * transactions.transfer({
  *    networkIdentifier: '7158c297294a540bc9ac6e474529c3da38d03ece056e3fa2d98141e6ec54132d',
@@ -108,7 +110,9 @@ const validateInputs = ({
  * });
  * ```
  *
- * ### Result
+ * @param inputs All available input params are described in the [[TransferInputs |TransferInputs interface]].
+ * @returns A transfer transaction object.
+ * ##### Result
  * ```javascript
  * {
  *   senderPublicKey: undefined,
@@ -121,8 +125,6 @@ const validateInputs = ({
  *   }
  * }
  * ```
- * @param inputs All available input params are described in the [[TransferInputs |TransferInputs interface]].
- * @returns A transfer transaction object.
  * @category Transactions
  */
 export const transfer = (inputs: TransferInputs): Partial<TransactionJSON> => {

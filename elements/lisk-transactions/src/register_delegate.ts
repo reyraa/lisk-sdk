@@ -19,7 +19,7 @@ import { DELEGATE_FEE, USERNAME_MAX_LENGTH } from './constants';
 import { TransactionJSON } from './transaction_types';
 import { createBaseTransaction } from './utils';
 /**
- * ### Description
+ * #### Description
  * A list of all available input parameters to create a [[DelegateTransaction |delegate transaction]], using the [[registerDelegate |registerDelegate()]] function.
  *
  */
@@ -53,10 +53,12 @@ const validateInputs = ({
 	validateNetworkIdentifier(networkIdentifier);
 };
 /**
- * ### Description
- * This creates a register delegate (type 10) transaction.
+ * #### Description
+ * This creates a register delegate (type 10) transaction and returns it as a [[TransactionJSON]].
  *
- * ### Example
+ * As an alternative to this function, it is possible to create a delegate transaction by initializing the [[DelegateTransaction]] class.
+ *
+ * #### Example
  * ```javascript
  * import * as transactions from '@liskhq/lisk-transactions';
  *
@@ -67,7 +69,9 @@ const validateInputs = ({
  * });
  * ```
  *
- * ### Result
+ * @param inputs All available input params are described in the [[RegisterDelegateInputs |RegisterDelegateInputs interface]].
+ * @returns A register delegate transaction object.
+ * ##### Example Result
  * ```javascript
  * {
  *  id: '16884232508060487400',
@@ -86,9 +90,6 @@ const validateInputs = ({
  *  receivedAt: undefined
  * }
  * ```
- *
- * @param inputs All available input params are described in the [[RegisterDelegateInputs |RegisterDelegateInputs interface]].
- * @returns A register delegate transaction object.
  * @category Transactions
  */
 export const registerDelegate = (

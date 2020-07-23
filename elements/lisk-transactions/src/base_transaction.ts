@@ -96,6 +96,7 @@ export const ENTITY_ACCOUNT = 'account';
 export const ENTITY_TRANSACTION = 'transaction';
 
 /**
+ * #### Description
  * The BaseTransaction class is the interface that all other transaction types need to inherit from, in order to be compatible with the Lisk SDK.
  */
 export abstract class BaseTransaction {
@@ -230,10 +231,10 @@ export abstract class BaseTransaction {
 	}
 
 	/**
-	 * ### Description
+	 * #### Description
 	 * Returns the transaction object in JSON.
 	 *
-	 * ### Example
+	 * #### Example
 	 * ```javascript
 	 * const transactions = require('@liskhq/lisk-transactions');
 	 *
@@ -248,7 +249,8 @@ export abstract class BaseTransaction {
 	 * console.log(tx.stringify());
 	 * ```
 	 *
-	 * ### Result
+	 * @returns A JSON object of the transaction.
+	 * ##### Example result
 	 * ```json
 	 * {
 	 *   "type":8,
@@ -263,7 +265,6 @@ export abstract class BaseTransaction {
 	 *   }
 	 * }
 	 * ```
-	 * @returns A JSON object of the transaction.
 	 */
 	public stringify(): string {
 		return JSON.stringify(this.toJSON());
@@ -277,7 +278,7 @@ export abstract class BaseTransaction {
 	}
 
 	/**
-	 * ### Description
+	 * #### Description
 	 * Returns the transaction as buffer.
 	 * @returns The buffer representation of the transaction.
 	 */
@@ -566,13 +567,14 @@ export abstract class BaseTransaction {
 	}
 
 	/**
-	 * ### Description
+	 * #### Description
 	 * Method to sign the transaction.
 	 *
-	 * ### Example
+	 * #### Example
 	 * ```javascript
+	 * //Imports lisk-transactions
 	 * const transactions = require('@liskhq/lisk-transactions');
-	 *
+	 * //Initializes a new transaction
 	 * const tx = new transactions.TransferTransaction({
 	 *    asset: {
 	 *        amount: '1',
@@ -580,29 +582,12 @@ export abstract class BaseTransaction {
 	 *    },
 	 *    networkIdentifier: networkIdentifier,
 	 * });
-	 *
+	 * //Signs the transaction with your secret passphrase
 	 * tx.sign('creek own stem final gate scrub live shallow stage host concert they');
 	 *
 	 * console.log(tx.stringify());
 	 * ```
 	 *
-	 * ### Result
-	 * ```json
-	 * {
-	 *   "id":"14444765956109766257",
-	 *   "type":8,
-	 *   "timestamp":0,
-	 *   "senderPublicKey":"5c554d43301786aec29a09b13b485176e81d1532347a351aeafe018c199fd7ca",
-	 *   "senderId":"11237980039345381032L",
-	 *   "fee":"10000000",
-	 *   "signature":"49d5824b9008b2005a554d984dedf8986b8bb54328dc5bf4c6a61fcdca6115a5ac0e17b5ec4c24bdaaae4f3be2cf808f514d2b74c506c6df9fcfcfad1caaa702",
-	 *   "signatures":[],
-	 *   "asset":{
-	 *      "amount":"1",
-	 *      "recipientId":"1L"
-	 *   }
-	 * }
-	 * ```
 	 * @param passphrase Passphrase of the account who intends to sign the transaction.
 	 * @param secondPassphrase Second passphrase of the account who intends to sign the transaction.
 	 */

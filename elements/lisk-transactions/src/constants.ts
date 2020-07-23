@@ -14,10 +14,10 @@
  */
 /* tslint:disable:no-magic-numbers */
 /**
- * ### Description
+ * #### Description
  * Number to use when converting between the smallest possible denomination and 1 LSK.
  *
- * ### Example
+ * #### Example
  * ```
  * import * as transactions from '@liskhq/lisk-transactions';
  *
@@ -26,10 +26,10 @@
  */
 export const FIXED_POINT = 10 ** 8;
 /**
- * ### Description
+ * #### Description
  * Fee required for a transfer (type 8) transaction.
  *
- * ### Example
+ * #### Example
  * ```
  * import * as transactions from '@liskhq/lisk-transactions';
  *
@@ -40,10 +40,10 @@ export const TRANSFER_FEE = FIXED_POINT * 0.1;
 export const IN_TRANSFER_FEE = FIXED_POINT * 0.1;
 export const OUT_TRANSFER_FEE = FIXED_POINT * 0.1;
 /**
- * ### Description
+ * #### Description
  * Fee required for a register second passphrase (type 9) transaction.
  *
- * ### Example
+ * #### Example
  * ```
  * import * as transactions from '@liskhq/lisk-transactions';
  *
@@ -52,10 +52,10 @@ export const OUT_TRANSFER_FEE = FIXED_POINT * 0.1;
  */
 export const SIGNATURE_FEE = FIXED_POINT * 5;
 /**
- * ### Description
+ * #### Description
  * Fee required for a register delegate (type 10) transaction.
  *
- * ### Example
+ * #### Example
  * ```
  * import * as transactions from '@liskhq/lisk-transactions';
  *
@@ -64,10 +64,10 @@ export const SIGNATURE_FEE = FIXED_POINT * 5;
  */
 export const DELEGATE_FEE = FIXED_POINT * 25;
 /**
- * ### Description
+ * #### Description
  * Fee required for a cast votes (type 11) transaction.
  *
- * ### Example
+ * #### Example
  * ```
  * import * as transactions from '@liskhq/lisk-transactions';
  *
@@ -76,10 +76,10 @@ export const DELEGATE_FEE = FIXED_POINT * 25;
  */
 export const VOTE_FEE = FIXED_POINT * 1;
 /**
- * ### Description
+ * #### Description
  * Fee required per group member (plus one) for a registered multisignature account (type 12) transaction.
  *
- * ### Example
+ * #### Example
  * ```
  * import * as transactions from '@liskhq/lisk-transactions';
  *
@@ -105,10 +105,10 @@ export const BYTESIZES = {
 	DATA: 64,
 };
 /**
- * ### Description
+ * #### Description
  * Date from which timestamps are calculated.
  *
- * ### Example
+ * #### Example
  * ```
  * import * as transactions from '@liskhq/lisk-transactions';
  *
@@ -117,10 +117,10 @@ export const BYTESIZES = {
  */
 export const EPOCH_TIME = new Date(Date.UTC(2016, 4, 24, 17, 0, 0, 0));
 /**
- * ### Description
+ * #### Description
  * Epoch time in milliseconds since Unix epoch.
  *
- * ### Example
+ * #### Example
  * ```
  * import * as transactions from '@liskhq/lisk-transactions';
  *
@@ -130,10 +130,10 @@ export const EPOCH_TIME = new Date(Date.UTC(2016, 4, 24, 17, 0, 0, 0));
 export const EPOCH_TIME_MILLISECONDS = EPOCH_TIME.getTime();
 const MS_FACTOR = 1000;
 /**
- * ### Description
+ * #### Description
  * Epoch time in seconds since Unix epoch.
  *
- * ### Example
+ * #### Example
  * ```
  * import * as transactions from '@liskhq/lisk-transactions';
  *
@@ -146,10 +146,10 @@ export const EPOCH_TIME_SECONDS = Math.floor(EPOCH_TIME.getTime() / MS_FACTOR);
 // Derived from bignum.fromBuffer(Buffer.from(new Array(8).fill(255))).
 const MAX_EIGHT_BYTE_NUMBER = '18446744073709551615';
 /**
- * ### Description
+ * #### Description
  * Maximum valid number which can form an address when suffixed with an 'L'.
  *
- * ### Example
+ * #### Example
  * ```
  * import * as transactions from '@liskhq/lisk-transactions';
  *
@@ -158,10 +158,10 @@ const MAX_EIGHT_BYTE_NUMBER = '18446744073709551615';
  */
 export const MAX_ADDRESS_NUMBER = MAX_EIGHT_BYTE_NUMBER;
 /**
- * ### Description
+ * #### Description
  * Maximum valid number for transaction IDs.
  *
- * ### Example
+ * #### Example
  * ```
  * import * as transactions from '@liskhq/lisk-transactions';
  *

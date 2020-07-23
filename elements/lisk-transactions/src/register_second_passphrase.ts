@@ -19,7 +19,7 @@ import { SecondSignatureTransaction } from './9_second_signature_transaction';
 import { TransactionJSON } from './transaction_types';
 import { createBaseTransaction } from './utils';
 /**
- * ### Description
+ * #### Description
  * A list of all available input parameters to create a [[SecondSignatureTransaction |second signature transaction]], using the [[registerSecondPassphrase | registerSecondPassphrase()]] function.
  *
  */
@@ -48,10 +48,12 @@ const validateInputs = ({
 	validateNetworkIdentifier(networkIdentifier);
 };
 /**
- * ### Description
- * This creates a register second passphrase, (type 9) transaction.
+ * #### Description
+ * This creates a register second passphrase, (type 9) transaction and returns it as a [[TransactionJSON]].
  *
- * ### Example
+ * As an alternative to this function, it is possible to create a second passphrase transaction by initializing the [[SecondSignatureTransaction]] class.
+ *
+ * #### Example
  * ```javascript
  * import * as transactions from '@liskhq/lisk-transactions';
  *
@@ -62,7 +64,9 @@ const validateInputs = ({
  * });
  * ```
  *
- * ### Result
+ * @param inputs All available input params are described in the [[SecondPassphraseInputs |SecondPassphraseInputs interface]].
+ * @returns A second passphrase transaction object.
+ * ##### Result
  * ```javascript
  * {
  *    id: '13923958554840193683',
@@ -83,8 +87,6 @@ const validateInputs = ({
  *    receivedAt: undefined
  *  }
  * ```
- * @param inputs All available input params are described in the [[SecondPassphraseInputs |SecondPassphraseInputs interface]].
- * @returns A second passphrase transaction object.
  * @category Transactions
  */
 export const registerSecondPassphrase = (
