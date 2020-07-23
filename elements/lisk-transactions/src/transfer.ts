@@ -28,7 +28,6 @@ import { createBaseTransaction } from './utils';
  * ### Description
  * A list of all available input parameters to create a [[TransferTransaction |transfer transaction]], using the [[transfer |transfer()]] function.
  *
- * @category Transactions
  */
 export interface TransferInputs {
 	/** The amount to transfer, (as a string in Beddows, the lowest denomination possible). */

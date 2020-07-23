@@ -66,6 +66,40 @@ interface RawAsset {
 	readonly amount: number | string;
 }
 
+/**
+ * ### Description
+ *
+ * ### Example
+ * ```javascript
+ * const transactions = require('@liskhq/lisk-transactions');
+ *
+ * const tx = new transactions.TransferTransaction({
+ *    asset: {
+ *        amount: '1',
+ *        recipientId: '1L',
+ *    },
+ *    networkIdentifier: networkIdentifier,
+ * });
+ *
+ * console.log(tx.stringify());
+ * ```
+ *
+ * ### Result
+ * ```json
+ *{
+ *   "type":8,
+ *   "timestamp":0,
+ *   "senderPublicKey":"",
+ *   "senderId":"",
+ *   "fee":"10000000",
+ *   "signatures":[],
+ *   "asset":{
+ *      "amount":"1",
+ *      "recipientId":"1L"
+ *   }
+ * }
+ * ```
+ */
 export class TransferTransaction extends BaseTransaction {
 	public readonly asset: TransferAsset;
 	public static TYPE = 8;
@@ -127,6 +161,11 @@ export class TransferTransaction extends BaseTransaction {
 		};
 	}
 
+	/**
+	 * ### Description
+	 * In `prepare()` the data from the database is filtered and cached, that is needed in the [[applyAsset]] and [[undoAsset]] functions later.
+	 * @param store Responsible for the caching and accessing transaction and account data.
+	 */
 	public async prepare(store: StateStorePrepare): Promise<void> {
 		await store.account.cache([
 			{
@@ -138,6 +177,11 @@ export class TransferTransaction extends BaseTransaction {
 		]);
 	}
 
+	/**
+	 * ### Description
+	 * Before a transaction reaches the apply step it is validated.
+	 * Check the transaction’s asset correctness from the schema perspective, (no access to StateStore here). Invalidate the transaction by pushing an error into the result array. Prepare the relevant information about the accounts, which will be accessible in the later steps during the apply and undo steps.
+	 */
 	protected validateAsset(): ReadonlyArray<TransactionError> {
 		const asset = this.assetToJSON();
 		const schemaErrors = validator.validate(transferAssetFormatSchema, asset);
@@ -170,6 +214,15 @@ export class TransferTransaction extends BaseTransaction {
 		return errors;
 	}
 
+	/**
+	 * ### Description
+	 * The business logic of a transaction is implemented in the applyAsset method.
+	 * It applies all of the necessary changes from the received transaction to the affected account(s), by calling store.set.
+	 * Calling store.get will acquire all of the relevant data.
+	 * The transaction that is currently processing is the function’s context, (e.g. this.amount).
+	 * This transaction can be invalidated by pushing an error into the result array.
+	 * @param store Responsible for the caching and accessing transaction and account data.
+	 */
 	protected applyAsset(store: StateStore): ReadonlyArray<TransactionError> {
 		const errors: TransactionError[] = [];
 		const sender = store.account.get(this.senderId);
@@ -219,6 +272,12 @@ export class TransferTransaction extends BaseTransaction {
 		return errors;
 	}
 
+	/**
+	 * ### Description
+	 * The inversion of the [[applyAsset]] method.
+	 * Undoes all of the changes to the accounts applied by the [[applyAsset]] step.
+	 * @param store Responsible for the caching and accessing transaction and account data.
+	 */
 	protected undoAsset(store: StateStore): ReadonlyArray<TransactionError> {
 		const errors: TransactionError[] = [];
 		const sender = store.account.get(this.senderId);

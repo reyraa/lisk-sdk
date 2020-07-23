@@ -32,7 +32,6 @@ import { createBaseTransaction, prependPlusToPublicKeys } from './utils';
  * ### Description
  * A list of all available input parameters to create a [[MultisignatureTransaction |multisignature transaction]], using the [[registerMultisignature | registerMultisignature()]] function.
  *
- * @category Transactions
  */
 export interface RegisterMultisignatureInputs {
 	/** todo */

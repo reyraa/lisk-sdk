@@ -22,7 +22,6 @@ import { createBaseTransaction } from './utils';
  * ### Description
  * A list of all available input parameters to create a [[DelegateTransaction |delegate transaction]], using the [[registerDelegate |registerDelegate()]] function.
  *
- * @category Transactions
  */
 export interface RegisterDelegateInputs {
 	/** todo */

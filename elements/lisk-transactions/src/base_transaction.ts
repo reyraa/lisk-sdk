@@ -95,27 +95,47 @@ export enum MultisignatureStatus {
 export const ENTITY_ACCOUNT = 'account';
 export const ENTITY_TRANSACTION = 'transaction';
 
+/**
+ * The BaseTransaction class is the interface that all other transaction types need to inherit from, in order to be compatible with the Lisk SDK.
+ */
 export abstract class BaseTransaction {
+	/** ID of the block that includes this transaction. */
 	public readonly blockId?: string;
+	/** Height of the block that includes this transaction. */
 	public readonly height?: number;
+	/** Confirmations of the block that includes this transaction. */
 	public readonly confirmations?: number;
+	/** Signatures of the accounts, who signed this transaction. */
 	public readonly signatures: string[];
+	/** Timestamp of the transaction, counting from the [[EPOCH_TIME|Lisk epoch]] time */
 	public readonly timestamp: number;
+	/** The hallmark of a transaction. Set this constant to any number, except 0-12, which are reserved for the default transactions. */
 	public readonly type: number;
+	/** todo */
 	public readonly containsUniqueData?: boolean;
+	/** Asset of the transaction. */
 	public readonly asset: object;
+	/** Fee of the transaction. */
 	public fee: BigNum;
+	/** todo */
 	public receivedAt?: Date;
 
+	/** Static type */
 	public static TYPE: number;
+	/** Static fee */
 	public static FEE = '0';
 
+	/** The transaction ID. */
 	protected _id?: string;
+	/** The public key of the sender of the transaction. */
 	protected _senderPublicKey?: string;
+	/** The signature of the sender of the transaction. */
 	protected _signature?: string;
+	/** todo */
 	protected _signSignature?: string;
 	protected _multisignatureStatus: MultisignatureStatus =
 		MultisignatureStatus.UNKNOWN;
+	/** The network identifier eliminates the possibility of transaction replays on different networks. */
 	protected _networkIdentifier: string;
 
 	protected abstract validateAsset(): ReadonlyArray<TransactionError>;
@@ -504,6 +524,47 @@ export abstract class BaseTransaction {
 		return timeElapsed > timeOut;
 	}
 
+	/**
+	 * ### Description
+	 * Method to sign the transaction.
+	 *
+	 * ### Example
+	 * ```javascript
+	 * const transactions = require('@liskhq/lisk-transactions');
+	 *
+	 * const tx = new transactions.TransferTransaction({
+	 *    asset: {
+	 *        amount: '1',
+	 *        recipientId: '1L',
+	 *    },
+	 *    networkIdentifier: networkIdentifier,
+	 * });
+	 *
+	 * tx.sign('creek own stem final gate scrub live shallow stage host concert they');
+	 *
+	 * console.log(tx.stringify());
+	 * ```
+	 *
+	 * ### Result
+	 * ```json
+	 * {
+	 *   "id":"14444765956109766257",
+	 *   "type":8,
+	 *   "timestamp":0,
+	 *   "senderPublicKey":"5c554d43301786aec29a09b13b485176e81d1532347a351aeafe018c199fd7ca",
+	 *   "senderId":"11237980039345381032L",
+	 *   "fee":"10000000",
+	 *   "signature":"49d5824b9008b2005a554d984dedf8986b8bb54328dc5bf4c6a61fcdca6115a5ac0e17b5ec4c24bdaaae4f3be2cf808f514d2b74c506c6df9fcfcfad1caaa702",
+	 *   "signatures":[],
+	 *   "asset":{
+	 *      "amount":"1",
+	 *      "recipientId":"1L"
+	 *   }
+	 * }
+	 * ```
+	 * @param passphrase Passphrase of the account who intends to sign the transaction.
+	 * @param secondPassphrase Second passphrase of the account who intends to sign the transaction.
+	 */
 	public sign(passphrase: string, secondPassphrase?: string): void {
 		const { publicKey } = getAddressAndPublicKeyFromPassphrase(passphrase);
 

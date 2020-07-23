@@ -50,11 +50,18 @@ export interface TransactionJSON {
 	readonly networkIdentifier?: string;
 }
 
+/**
+ * This interface describes the results for a validation.
+ */
 export interface IsValidResponse {
+	/** `true` if the response is valid, `false otherwise`. */
 	readonly valid: boolean;
+	/** A list of TransactionErrors, empty if none have been thrown. */
 	readonly errors?: ReadonlyArray<TransactionError>;
 }
-
+/**
+ * This interface describes the results for a validation, which is containing 1 error maximum.
+ */
 export interface IsValidResponseWithError {
 	readonly valid: boolean;
 	readonly error?: TransactionError;

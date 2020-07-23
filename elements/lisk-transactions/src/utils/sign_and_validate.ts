@@ -144,7 +144,7 @@ export const checkPublicKeySignatureUniqueness = (
  * @param minimumValidations The public key to validate as number.
  * @param transactionBytes The buffer representation of the transaction.
  * @param id Optional transaction ID.
- * @returns `true` if the signature is valid for the provided transaction and public key, otherwise an error will be thrown.
+ * @returns [[IsValidResponse|IsValidResponse interface]]
  */
 export const validateMultisignatures = (
 	publicKeys: ReadonlyArray<string>,

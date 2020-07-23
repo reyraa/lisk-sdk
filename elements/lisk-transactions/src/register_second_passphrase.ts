@@ -22,7 +22,6 @@ import { createBaseTransaction } from './utils';
  * ### Description
  * A list of all available input parameters to create a [[SecondSignatureTransaction |second signature transaction]], using the [[registerSecondPassphrase | registerSecondPassphrase()]] function.
  *
- * @category Transactions
  */
 export interface SecondPassphraseInputs {
 	/** todo */

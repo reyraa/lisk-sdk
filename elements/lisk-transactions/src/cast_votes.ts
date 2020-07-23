@@ -29,7 +29,6 @@ import {
  * ### Description
  * A list of all available input parameters to create a [VoteTransaction |vote transaction]], using the [[castVotes |castVotes()]] function.
  *
- * @category Transactions
  */
 export interface CastVoteInputs {
 	/** The ID of the network where the transaction will be broadcasted to. */
