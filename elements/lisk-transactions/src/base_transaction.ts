@@ -229,6 +229,42 @@ export abstract class BaseTransaction {
 		return transaction;
 	}
 
+	/**
+	 * ### Description
+	 * Returns the transaction object in JSON.
+	 *
+	 * ### Example
+	 * ```javascript
+	 * const transactions = require('@liskhq/lisk-transactions');
+	 *
+	 * const tx = new transactions.TransferTransaction({
+	 *    asset: {
+	 *        amount: '1',
+	 *        recipientId: '1L',
+	 *    },
+	 *    networkIdentifier: networkIdentifier,
+	 * });
+	 *
+	 * console.log(tx.stringify());
+	 * ```
+	 *
+	 * ### Result
+	 * ```json
+	 * {
+	 *   "type":8,
+	 *   "timestamp":0,
+	 *   "senderPublicKey":"",
+	 *   "senderId":"",
+	 *   "fee":"10000000",
+	 *   "signatures":[],
+	 *   "asset":{
+	 *      "amount":"1",
+	 *      "recipientId":"1L"
+	 *   }
+	 * }
+	 * ```
+	 * @returns A JSON object of the transaction.
+	 */
 	public stringify(): string {
 		return JSON.stringify(this.toJSON());
 	}
@@ -240,6 +276,11 @@ export abstract class BaseTransaction {
 		);
 	}
 
+	/**
+	 * ### Description
+	 * Returns the transaction as buffer.
+	 * @returns The buffer representation of the transaction.
+	 */
 	public getBytes(): Buffer {
 		const transactionBytes = Buffer.concat([
 			this.getBasicBytes(),

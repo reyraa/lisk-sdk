@@ -34,9 +34,15 @@ import { convertToAssetError, TransactionError } from './errors';
 import { TransactionJSON } from './transaction_types';
 import { verifyAmountBalance, verifyBalance } from './utils';
 
+/**
+ * The TransferAsset interface describes the contents of the asset property of the [[TransferTransaction]].
+ */
 export interface TransferAsset {
+	/** Data field to provide additional information, like a small message or a comment. */
 	readonly data?: string;
+	/** Address of the recipient of the transferred tokens. */
 	readonly recipientId: string;
+	/** Amount of tokens to be trtansfered from the sender to the recipient. */
 	readonly amount: BigNum;
 }
 
@@ -68,6 +74,8 @@ interface RawAsset {
 
 /**
  * ### Description
+ * A transfer transaction sends tokens from one account to another.
+ * The specific [[asset]] properties are described in [[TransferAsset]].
  *
  * ### Example
  * ```javascript
