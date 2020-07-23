@@ -85,6 +85,7 @@ export class TransferTransaction extends BaseTransaction {
 
 	/**
 	 * #### Example
+	 * 
 	 * ```javascript
 	 * const transactions = require('@liskhq/lisk-transactions');
 	 *
@@ -101,7 +102,7 @@ export class TransferTransaction extends BaseTransaction {
 	 *
 	 * #### Result
 	 * ```json
-	 *{
+	 * {
 	 *   "type":8,
 	 *   "timestamp":0,
 	 *   "senderPublicKey":"",
@@ -114,6 +115,7 @@ export class TransferTransaction extends BaseTransaction {
 	 *   }
 	 * }
 	 * ```
+	 *
 	 * @param rawTransaction An [[TransactionJSON]] object with a [[TransferAsset]] asset property.
 	 * ##### Example
 	 * ```javascript
@@ -125,6 +127,7 @@ export class TransferTransaction extends BaseTransaction {
 	 *    networkIdentifier: networkIdentifier,
 	 * }
 	 * ```
+	 *
 	 * @returns A TransferTransaction instance.
 	 */
 	public constructor(rawTransaction: unknown) {
