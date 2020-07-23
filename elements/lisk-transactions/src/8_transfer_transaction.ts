@@ -77,42 +77,56 @@ interface RawAsset {
  * A transfer transaction sends tokens from one account to another.
  * The specific [[asset]] properties are described in [[TransferAsset]].
  *
- * ### Example
- * ```javascript
- * const transactions = require('@liskhq/lisk-transactions');
- *
- * const tx = new transactions.TransferTransaction({
- *    asset: {
- *        amount: '1',
- *        recipientId: '1L',
- *    },
- *    networkIdentifier: networkIdentifier,
- * });
- *
- * console.log(tx.stringify());
- * ```
- *
- * ### Result
- * ```json
- *{
- *   "type":8,
- *   "timestamp":0,
- *   "senderPublicKey":"",
- *   "senderId":"",
- *   "fee":"10000000",
- *   "signatures":[],
- *   "asset":{
- *      "amount":"1",
- *      "recipientId":"1L"
- *   }
- * }
- * ```
  */
 export class TransferTransaction extends BaseTransaction {
 	public readonly asset: TransferAsset;
 	public static TYPE = 8;
 	public static FEE = TRANSFER_FEE.toString();
 
+	/**
+	 * #### Example
+	 * ```javascript
+	 * const transactions = require('@liskhq/lisk-transactions');
+	 *
+	 * const tx = new transactions.TransferTransaction({
+	 *    asset: {
+	 *        amount: '1',
+	 *        recipientId: '1L',
+	 *    },
+	 *    networkIdentifier: networkIdentifier,
+	 * });
+	 *
+	 * console.log(tx.stringify());
+	 * ```
+	 *
+	 * #### Result
+	 * ```json
+	 *{
+	 *   "type":8,
+	 *   "timestamp":0,
+	 *   "senderPublicKey":"",
+	 *   "senderId":"",
+	 *   "fee":"10000000",
+	 *   "signatures":[],
+	 *   "asset":{
+	 *      "amount":"1",
+	 *      "recipientId":"1L"
+	 *   }
+	 * }
+	 * ```
+	 * @param rawTransaction An [[TransactionJSON]] object with a [[TransferAsset]] asset property.
+	 * ##### Example
+	 * ```javascript
+	 * {
+	 *    asset: {
+	 *        amount: '1',
+	 *        recipientId: '1L',
+	 *    },
+	 *    networkIdentifier: networkIdentifier,
+	 * }
+	 * ```
+	 * @returns A TransferTransaction instance.
+	 */
 	public constructor(rawTransaction: unknown) {
 		super(rawTransaction);
 		const tx = (typeof rawTransaction === 'object' && rawTransaction !== null
