@@ -107,6 +107,7 @@ export interface GenesisConfig {
 		assetType: number;
 		baseFee: bigint;
 	}[];
+	minRemainingBalance: bigint;
 }
 
 export interface ApplicationConstants {
