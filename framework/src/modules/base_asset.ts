@@ -42,6 +42,7 @@ export interface Transaction {
 	readonly senderPublicKey: Buffer;
 	readonly signatures: ReadonlyArray<Buffer>;
 	readonly asset: Buffer;
+	readonly getBytes: () => Buffer;
 }
 
 export abstract class BaseAsset<T = unknown> {
